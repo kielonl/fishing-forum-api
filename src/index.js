@@ -2,13 +2,13 @@ const fastify = require("fastify")({
   logger: true,
 });
 const port = 3000;
-const { dbQuery } = require("../database/database");
+const { dbQuery } = require("./database/database");
 
 const {
   insertQuery,
   selectQuery,
   selectUserByUUIDQuery,
-} = require("../database/queries.js");
+} = require("./database/queries.js");
 
 const data = new Date();
 const username = "ktos2";
