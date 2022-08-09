@@ -22,12 +22,8 @@ module.exports = function (app) {
   });
 
   app.post("/user/create", async (request, response) => {
-    let user = request.body;
-    user = userInfoValidation(user);
+    const user = userInfoValidation(request.body);
     user.date = new Date().toLocaleString();
-    console.log("--------");
-    console.log(insertQuery(user));
-    console.log("--------");
 
     const res = await dbQuery(insertQuery(user));
 

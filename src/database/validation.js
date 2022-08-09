@@ -26,13 +26,13 @@ const passwordHashing = (password) => {
 
 const yearsOfExperienceValidation = (yearsOfExperience) => {
   if (yearsOfExperience < 0 || yearsOfExperience > 120)
-    throw new Error("it cannot be");
+    throw new Error("maxmimum years of experience is 120");
   return yearsOfExperience;
 };
 
 const biggestCatchValidadtion = (biggestCatch) => {
   if (biggestCatch < 0 || biggestCatch > 102)
-    throw new Error("there is no dick");
+    throw new Error("fish cannot be that big");
   return biggestCatch;
 };
 
@@ -44,24 +44,14 @@ const fishingCardValidation = (hasFishingCard) => {
 };
 
 const userInfoValidation = (userInfo) => {
-  try {
-    usernameValidation(userInfo.username);
-    passwordHashing(userInfo.password);
-    yearsOfExperienceValidation(userInfo.yearsOfExperience);
-    biggestCatchValidadtion(userInfo.biggestCatch);
-    fishingCardValidation(userInfo.hasFishingCard);
-  } finally {
-    const user = {
-      username: usernameValidation(userInfo.username),
-      password: passwordHashing(userInfo.password),
-      yearsOfExperience: yearsOfExperienceValidation(
-        userInfo.yearsOfExperience
-      ),
-      biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
-      hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
-    };
-    return user;
-  }
+  const user = {
+    username: usernameValidation(userInfo.username),
+    password: passwordHashing(userInfo.password),
+    yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
+    biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
+    hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
+  };
+  return user;
 };
 
 module.exports.userInfoValidation = userInfoValidation;
