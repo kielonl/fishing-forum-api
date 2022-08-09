@@ -9,11 +9,11 @@ const selectQuery = (table) => {
   return `SELECT * from ${table}`;
 };
 
-const selectUserByUUIDQuery = (uuid) => {
-  return `SELECT * from public.user WHERE user_id = '${uuid}' `;
+const selectQueryWithCondition = (table, parameter1, parameter2) => {
+  return `SELECT exists(SELECT "NAME" from ${table} where "${parameter1}" = '${parameter2}')`;
 };
 
 module.exports.insertIntoUserQuery = insertIntoUserQuery;
 module.exports.insertIntoAddressQuery = insertIntoAddressQuery;
 module.exports.selectQuery = selectQuery;
-module.exports.selectUserByUUIDQuery = selectUserByUUIDQuery;
+module.exports.selectQueryWithCondition = selectQueryWithCondition;

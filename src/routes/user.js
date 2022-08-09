@@ -6,7 +6,10 @@ const {
   selectUserByUUIDQuery,
 } = require("../database/queries.js");
 
-const { userInfoValidation } = require("../database/validation");
+const {
+  userInfoValidation,
+  addressValidation,
+} = require("../database/validation");
 
 module.exports = function (app) {
   app.post("/user", async (request, response) => {
@@ -22,11 +25,12 @@ module.exports = function (app) {
   });
 
   app.post("/user/create", async (request, response) => {
-    const user = userInfoValidation(request.body);
+    const user = userInfoValidation(request.body.user);
+    const address = await addressValidation(request.body.address);
     user.date = new Date().toLocaleString();
+    address.date = new Date().toLocaleString();
 
     const res = await dbQuery(insertIntoUserQuery(user));
-
     response.code(201).send({ data: res });
   });
 };

@@ -2,15 +2,21 @@ const createError = require("http-errors");
 
 require("dotenv").config();
 
-const selectUserByUUIDQuery = require("./queries");
+const {
+  selectQuery,
+  selectQueryWithCondition,
+} = require("../database/queries");
+
+const { dbQuery } = require("../database/database");
+
 const crypto = require("crypto");
+const { create } = require("domain");
 
 //used in this file only
 const isLengthOK = (minLength, maxLength, string) => {
   if (string.length < minLength || string.length > maxLength) return false;
   return true;
 };
-//exported
 const usernameValidation = (username) => {
   if (!isLengthOK(3, 18, username))
     throw createError(
@@ -42,12 +48,35 @@ const biggestCatchValidadtion = (biggestCatch) => {
 };
 
 const fishingCardValidation = (hasFishingCard) => {
-  console.log(typeof hasFishingCard);
   if (typeof hasFishingCard !== "boolean")
     throw createError(400, "answer must be yes or no");
   return hasFishingCard;
 };
 
+const countryValidation = async (country) => {
+  const res = await dbQuery(
+    selectQueryWithCondition("countries", "NAME", country)
+  );
+  if (!res) {
+    throw createError(400, "there is no such country");
+  }
+  console.log(country);
+  return country;
+};
+const cityNameValidation = (city) => {
+  if (city.length < 0 || city.length > 30) {
+    throw createError(400, "city name is too long");
+  }
+  return city;
+};
+const voivodeshipValidation = (voivodeship) => {
+  if (voivodeship.length < 0 || voivodeship.length > 30) {
+    throw createError(400, "voivodeship name is too long");
+  }
+  return voivodeship;
+};
+
+//user table
 const userInfoValidation = (userInfo) => {
   const user = {
     username: usernameValidation(userInfo.username),
@@ -59,4 +88,15 @@ const userInfoValidation = (userInfo) => {
   return user;
 };
 
+//address table
+const addressValidation = async (userInfo) => {
+  const address = {
+    country: await countryValidation(userInfo.country),
+    city: cityNameValidation(userInfo.city),
+    voivodeship: voivodeshipValidation(userInfo.voivodeship),
+  };
+  return address;
+};
+
 module.exports.userInfoValidation = userInfoValidation;
+module.exports.addressValidation = addressValidation;
