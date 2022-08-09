@@ -1,7 +1,7 @@
 const { dbQuery } = require("../database/database");
 
 const {
-  insertQuery,
+  insertIntoUserQuery,
   selectQuery,
   selectUserByUUIDQuery,
 } = require("../database/queries.js");
@@ -25,7 +25,7 @@ module.exports = function (app) {
     const user = userInfoValidation(request.body);
     user.date = new Date().toLocaleString();
 
-    const res = await dbQuery(insertQuery(user, "user"));
+    const res = await dbQuery(insertIntoUserQuery(user));
 
     response.code(201).send({ data: res });
   });
