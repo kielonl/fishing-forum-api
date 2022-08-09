@@ -89,7 +89,7 @@ const userInfoValidation = (userInfo) => {
 };
 
 //address table
-const addressValidation = async (userInfo) => {
+const detailsValidation = async (userInfo) => {
   const address = {
     country: await countryValidation(userInfo.country),
     city: cityNameValidation(userInfo.city),
@@ -99,4 +99,4 @@ const addressValidation = async (userInfo) => {
 };
 
 module.exports.userInfoValidation = userInfoValidation;
-module.exports.addressValidation = addressValidation;
+module.exports.detailsValidation = detailsValidation;
