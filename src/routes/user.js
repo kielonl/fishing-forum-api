@@ -6,11 +6,7 @@ const {
   selectUserByUUIDQuery,
 } = require("../database/queries.js");
 
-const {
-  usernameValidation,
-  passwordValidation,
-  checkForUUID,
-} = require("../database/validation");
+const { userInfoValidation } = require("../database/validation");
 
 module.exports = function (app) {
   app.post("/user", async (request, response) => {
@@ -26,8 +22,12 @@ module.exports = function (app) {
   });
 
   app.post("/user/create", async (request, response) => {
-    const user = request.body;
+    let user = request.body;
+    user = userInfoValidation(user);
     user.date = new Date().toLocaleString();
+    console.log("--------");
+    console.log(insertQuery(user));
+    console.log("--------");
 
     const res = await dbQuery(insertQuery(user));
 

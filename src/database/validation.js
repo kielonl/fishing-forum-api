@@ -16,11 +16,7 @@ const usernameValidation = (username) => {
   return username.trim();
 };
 
-const checkForUUID = (uuid) => {
-  return selectUserByUUIDQuery(uuid);
-};
-
-const passwordValidation = (password) => {
+const passwordHashing = (password) => {
   if (!isLengthOK(3, 18, password))
     return { errorMessage: "password length too long or too short" };
   const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
@@ -30,9 +26,42 @@ const passwordValidation = (password) => {
 
 const yearsOfExperienceValidation = (yearsOfExperience) => {
   if (yearsOfExperience < 0 || yearsOfExperience > 120)
-    throw new Error("nie da sie tak");
+    throw new Error("it cannot be");
+  return yearsOfExperience;
 };
 
-module.exports.usernameValidation = usernameValidation;
-module.exports.passwordValidation = passwordValidation;
-module.exports.checkForUUID = checkForUUID;
+const biggestCatchValidadtion = (biggestCatch) => {
+  if (biggestCatch < 0 || biggestCatch > 102)
+    throw new Error("there is no dick");
+  return biggestCatch;
+};
+
+const fishingCardValidation = (hasFishingCard) => {
+  console.log(typeof hasFishingCard);
+  if (typeof hasFishingCard !== "boolean")
+    throw new Error("answer must be yes or no");
+  return hasFishingCard;
+};
+
+const userInfoValidation = (userInfo) => {
+  try {
+    usernameValidation(userInfo.username);
+    passwordHashing(userInfo.password);
+    yearsOfExperienceValidation(userInfo.yearsOfExperience);
+    biggestCatchValidadtion(userInfo.biggestCatch);
+    fishingCardValidation(userInfo.hasFishingCard);
+  } finally {
+    const user = {
+      username: usernameValidation(userInfo.username),
+      password: passwordHashing(userInfo.password),
+      yearsOfExperience: yearsOfExperienceValidation(
+        userInfo.yearsOfExperience
+      ),
+      biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
+      hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
+    };
+    return user;
+  }
+};
+
+module.exports.userInfoValidation = userInfoValidation;
