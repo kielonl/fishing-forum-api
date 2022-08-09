@@ -16,30 +16,21 @@ module.exports = function (app) {
   app.post("/user", async (request, response) => {
     response.type("application/json").code(200);
     const res = await dbQuery(selectQuery("public.user"));
-    return { data: res };
+    response.code(200).send({ data: res });
   });
   //get user by uuid
   app.post("/user/:id", async (request, response) => {
     response.type("application/json").code(200);
     const res = await dbQuery(selectUserByUUIDQuery(request.params.id));
-    return { data: res };
+    response.code(200).send({ data: res });
   });
 
   app.post("/user/create", async (request, response) => {
-    const name = request.body;
+    const user = request.body;
+    user.date = new Date().toLocaleString();
 
-    const res = await dbQuery(
-      insertQuery(
-        request.body.uuid,
-        request.body.username,
-        request.body.password,
-        request.body.yearsOfExperience,
-        request.body.addressId,
-        request.body.hasFishingCard,
-        request.body.biggestCatch,
-        new Date().toLocaleString()
-      )
-    );
+    const res = await dbQuery(insertQuery(user));
+
     response.code(201).send({ data: res });
   });
 };
