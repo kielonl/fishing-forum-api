@@ -1,14 +1,5 @@
-const insertQuery = (
-  uuid,
-  username,
-  password,
-  yearsOfExperience,
-  addressId,
-  hasFishingCard,
-  biggestCatch,
-  createdAt
-) => {
-  return `INSERT INTO public.user (user_id,username,password,years_of_experience,address_id,has_fishing_card,biggest_catch,created_at) VALUES('${uuid}','${username}','${password}','${yearsOfExperience}','${addressId}','${hasFishingCard}','${biggestCatch}','${createdAt}')`;
+const insertQuery = (user) => {
+  return `INSERT INTO public.user (username,password,years_of_experience,has_fishing_card,biggest_catch,created_at) VALUES('${user.username}','${user.password}','${user.yearsOfExperience}','${user.hasFishingCard}','${user.biggestCatch}','${user.date}')`;
 };
 
 const selectQuery = (table) => {
