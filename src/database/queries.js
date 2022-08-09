@@ -1,5 +1,5 @@
 const insertQuery = (user) => {
-  return `INSERT INTO public.user (user_id,username,password,years_of_experience,address_id,has_fishing_card,biggest_catch,created_at) VALUES('${user.uuid}','${user.username}','${user.password}','${user.yearsOfExperience}','${user.addressId}','${user.hasFishingCard}','${user.biggestCatch}','${user.date}')`;
+  return `INSERT INTO public.user (user_id,username,password,years_of_experience,address_id,has_fishing_card,biggest_catch,created_at) VALUES(gen_random_uuid(),'${user.username}','${user.password}','${user.yearsOfExperience}',gen_random_uuid(),'${user.hasFishingCard}','${user.biggestCatch}','${user.date}')`;
 };
 
 const selectQuery = (table) => {
