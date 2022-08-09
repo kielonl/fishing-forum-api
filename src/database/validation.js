@@ -1,3 +1,5 @@
+const createError = require("http-errors");
+
 require("dotenv").config();
 
 const selectUserByUUIDQuery = require("./queries");
@@ -11,8 +13,11 @@ const isLengthOK = (minLength, maxLength, string) => {
 //exported
 const usernameValidation = (username) => {
   if (!isLengthOK(3, 18, username))
-    throw new Error("username length must be between 3 and 18 characters");
-  if (!isNaN(username)) throw new Error("username cannot me a number");
+    throw createError(
+      400,
+      "username length must be between 3 and 18 characters"
+    );
+  if (!isNaN(username)) throw createError(400, "username cannot me a number");
   return username.trim();
 };
 
@@ -26,20 +31,20 @@ const passwordHashing = (password) => {
 
 const yearsOfExperienceValidation = (yearsOfExperience) => {
   if (yearsOfExperience < 0 || yearsOfExperience > 120)
-    throw new Error("maxmimum years of experience is 120");
+    throw createError(400, "maxmimum years of experience is 120");
   return yearsOfExperience;
 };
 
 const biggestCatchValidadtion = (biggestCatch) => {
   if (biggestCatch < 0 || biggestCatch > 102)
-    throw new Error("fish cannot be that big");
+    throw createError(400, "fish cannot be that big");
   return biggestCatch;
 };
 
 const fishingCardValidation = (hasFishingCard) => {
   console.log(typeof hasFishingCard);
   if (typeof hasFishingCard !== "boolean")
-    throw new Error("answer must be yes or no");
+    throw createError(400, "answer must be yes or no");
   return hasFishingCard;
 };
 
