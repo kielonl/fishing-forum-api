@@ -13,7 +13,7 @@ const {
 } = require("../database/validation");
 
 module.exports = function (app) {
-  app.post("/user", async (request, response) => {
+  app.get("/user", async (request, response) => {
     const res = await dbQuery(selectQuery("public.user"));
     response.code(200).send({ data: res });
   });
@@ -24,19 +24,17 @@ module.exports = function (app) {
     response.code(200).send({ data: res });
   });
 
-  app.post("/create/user", async (request, response) => {
+  app.post("/user", async (request, response) => {
     const user = userInfoValidation(request.body);
     const res = await dbQuery(insertIntoUserQuery(user));
     response.code(201).send({ data: res });
   });
-  app.post("/create/details", async (request, response) => {
+  app.post("/user/details", async (request, response) => {
     const details = await detailsValidation(request.body);
     const responseFromDetails = await dbQuery(insertIntoDetailsQuery(details));
     const responseFromUser = await dbQuery(
       appendUUIDToUser(details.uuid, responseFromDetails[0].details_id)
     );
-    response
-      .code(201)
-      .send({ data: responseFromDetails, data1: responseFromUser });
+    response.code(201).send({ responseFromDetails, responseFromUser });
   });
 };

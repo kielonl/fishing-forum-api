@@ -9,8 +9,8 @@ const { dbQuery } = require("../database/database");
 const crypto = require("crypto");
 
 //used in this file only
-const isSizeOK = (minLength, maxLength, string) => {
-  return string < minLength || string > maxLength;
+const isSizeOK = (minLength, maxLength, size) => {
+  return size < minLength || size > maxLength;
 };
 
 const usernameValidation = (username) => {
@@ -65,10 +65,7 @@ const countryValidation = async (country) => {
   return country;
 };
 const cityNameValidation = (city) => {
-  if (
-    city.replaceAll(" ", "").length < 0 ||
-    city.replaceAll(" ", "").length > 30
-  ) {
+  if (city.trim().length <= 0 || city.trim().length >= 30) {
     throw createError(400, "city name must be between 0 and 30 characters");
   }
   return city;
