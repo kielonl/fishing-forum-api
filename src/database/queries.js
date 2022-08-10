@@ -1,15 +1,24 @@
-const insertQuery = (user) => {
-  return `INSERT INTO public.user (username,password,years_of_experience,has_fishing_card,biggest_catch,created_at) VALUES('${user.username}','${user.password}','${user.yearsOfExperience}','${user.hasFishingCard}','${user.biggestCatch}','${user.date}')`;
+const insertIntoUserQuery = (userInfo) => {
+  return `INSERT INTO public.user (username,password,created_at) VALUES('${userInfo.username}','${userInfo.password}','${userInfo.date}') RETURNING *`;
+};
+const insertIntoDetailsQuery = (userInfo) => {
+  return `INSERT INTO public.details (country,city,created_at) VALUES('${userInfo.country}','${userInfo.city}','${userInfo.date}') RETURNING *`;
+};
+
+const appendUUIDToUser = (userUUID, detailsUUID) => {
+  return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'RETURNING *`;
 };
 
 const selectQuery = (table) => {
-  return `SELECT * from ${table}`;
+  return `SELECT * FROM ${table}`;
 };
 
-const selectUserByUUIDQuery = (uuid) => {
-  return `SELECT * from public.user WHERE user_id = '${uuid}' `;
+const selectQueryWithCondition = (table, parameter1, parameter2) => {
+  return `SELECT exists(SELECT "NAME" FROM ${table} WHERE "${parameter1}" = '${parameter2}')`;
 };
 
-module.exports.insertQuery = insertQuery;
+module.exports.insertIntoUserQuery = insertIntoUserQuery;
+module.exports.insertIntoDetailsQuery = insertIntoDetailsQuery;
 module.exports.selectQuery = selectQuery;
-module.exports.selectUserByUUIDQuery = selectUserByUUIDQuery;
+module.exports.selectQueryWithCondition = selectQueryWithCondition;
+module.exports.appendUUIDToUser = appendUUIDToUser;

@@ -2,17 +2,19 @@ const createError = require("http-errors");
 
 require("dotenv").config();
 
-const selectUserByUUIDQuery = require("./queries");
+const { selectQueryWithCondition } = require("../database/queries");
+
+const { dbQuery } = require("../database/database");
+
 const crypto = require("crypto");
 
 //used in this file only
-const isLengthOK = (minLength, maxLength, string) => {
-  if (string.length < minLength || string.length > maxLength) return false;
-  return true;
+const isSizeOK = (minLength, maxLength, size) => {
+  return size < minLength || size > maxLength;
 };
-//exported
+
 const usernameValidation = (username) => {
-  if (!isLengthOK(3, 18, username))
+  if (isSizeOK(3, 18, username.length))
     throw createError(
       400,
       "username length must be between 3 and 18 characters"
@@ -22,41 +24,76 @@ const usernameValidation = (username) => {
 };
 
 const passwordHashing = (password) => {
-  if (!isLengthOK(3, 18, password))
+  if (isSizeOK(3, 18, password.length))
     return { errorMessage: "password length too long or too short" };
   const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
   password = hasher.update(password).digest("hex");
   return password;
 };
 
-const yearsOfExperienceValidation = (yearsOfExperience) => {
-  if (yearsOfExperience < 0 || yearsOfExperience > 120)
-    throw createError(400, "maxmimum years of experience is 120");
+const yearsOfExperienceValidation = (yearsOfExperience = null) => {
+  if (yearsOfExperience !== null) {
+    if (isSizeOK(0, 120, yearsOfExperience))
+      throw createError(400, "maximum years of experience is 120");
+  }
   return yearsOfExperience;
 };
 
-const biggestCatchValidadtion = (biggestCatch) => {
-  if (biggestCatch < 0 || biggestCatch > 102)
-    throw createError(400, "fish cannot be that big");
+const biggestCatchValidadtion = (biggestCatch = null) => {
+  if (biggestCatch !== null) {
+    if (isSizeOK(0, 1002, biggestCatch))
+      throw createError(400, "fish weight must be between 0 kg and 1 ton");
+  }
   return biggestCatch;
 };
 
-const fishingCardValidation = (hasFishingCard) => {
-  console.log(typeof hasFishingCard);
-  if (typeof hasFishingCard !== "boolean")
-    throw createError(400, "answer must be yes or no");
-  return hasFishingCard;
+const fishingCardValidation = (hasFishingCard = null) => {
+  if (hasFishingCard !== null) {
+    if (typeof hasFishingCard !== "boolean")
+      throw createError(400, "answer must be yes or no");
+  }
+  return null;
 };
 
+const countryValidation = async (country) => {
+  const res = await dbQuery(
+    selectQueryWithCondition("countries", "NAME", country)
+  );
+  if (!res) {
+    throw createError(400, "there is no such country");
+  }
+  return country;
+};
+const cityNameValidation = (city) => {
+  if (city.trim().length <= 0 || city.trim().length >= 30) {
+    throw createError(400, "city name must be between 0 and 30 characters");
+  }
+  return city;
+};
+
+//user table
 const userInfoValidation = (userInfo) => {
   const user = {
     username: usernameValidation(userInfo.username),
     password: passwordHashing(userInfo.password),
-    yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
-    biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
-    hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
+    date: new Date().toLocaleString(),
   };
   return user;
 };
 
+//address table
+const detailsValidation = async (userInfo) => {
+  const address = {
+    uuid: userInfo.uuid,
+    country: await countryValidation(userInfo.country),
+    city: cityNameValidation(userInfo.city),
+    yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
+    biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
+    hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
+    date: new Date().toLocaleString(),
+  };
+  return address;
+};
+
 module.exports.userInfoValidation = userInfoValidation;
+module.exports.detailsValidation = detailsValidation;
