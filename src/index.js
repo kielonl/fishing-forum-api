@@ -3,6 +3,7 @@ const fastify = require("fastify")({
 });
 const port = 3000;
 require("./routes/user")(fastify);
+require("./routes/login")(fastify);
 
 fastify.get("/", async (request, response) => {
   response.type("application/json").code(200);

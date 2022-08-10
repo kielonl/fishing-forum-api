@@ -47,12 +47,12 @@ const biggestCatchValidadtion = (biggestCatch = null) => {
   return biggestCatch;
 };
 
-const fishingCardValidation = (hasFishingCard = null) => {
+const fishingCardValidation = (hasFishingCard) => {
   if (hasFishingCard !== null) {
     if (typeof hasFishingCard !== "boolean")
       throw createError(400, "answer must be yes or no");
   }
-  return null;
+  return hasFishingCard;
 };
 
 const countryValidation = async (country) => {
@@ -83,7 +83,8 @@ const userInfoValidation = (userInfo) => {
 
 //address table
 const detailsValidation = async (userInfo) => {
-  const address = {
+  console.log(userInfo.hasFishingCard);
+  const details = {
     uuid: userInfo.uuid,
     country: await countryValidation(userInfo.country),
     city: cityNameValidation(userInfo.city),
@@ -92,8 +93,9 @@ const detailsValidation = async (userInfo) => {
     hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
     date: new Date().toLocaleString(),
   };
-  return address;
+  return details;
 };
 
 module.exports.userInfoValidation = userInfoValidation;
 module.exports.detailsValidation = detailsValidation;
+module.exports.passwordHashing = passwordHashing;
