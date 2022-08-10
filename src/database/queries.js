@@ -6,7 +6,7 @@ const insertIntoDetailsQuery = (userInfo) => {
 };
 
 const appendUUIDToUser = (userUUID, detailsUUID) => {
-  return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'`;
+  return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'RETURNING *`;
 };
 
 const selectQuery = (table) => {

@@ -34,7 +34,7 @@ module.exports = function (app) {
     const details = await detailsValidation(request.body);
     const responseFromDetails = await dbQuery(insertIntoDetailsQuery(details));
     const responseFromUser = await dbQuery(
-      appendUUIDToUser(details.uuid, res[0].details_id)
+      appendUUIDToUser(details.uuid, responseFromDetails[0].details_id)
     );
     response
       .code(201)
