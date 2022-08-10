@@ -10,7 +10,6 @@ const {
 const { dbQuery } = require("../database/database");
 
 const crypto = require("crypto");
-const { create } = require("domain");
 
 //used in this file only
 const isLengthOK = (minLength, maxLength, string) => {
@@ -69,16 +68,13 @@ const countryValidation = async (country) => {
   return country;
 };
 const cityNameValidation = (city) => {
-  if (city.length < 0 || city.length > 30) {
+  if (
+    city.replaceAll(" ", "").length < 0 ||
+    city.replaceAll(" ", "").length > 30
+  ) {
     throw createError(400, "city name is too long");
   }
   return city;
-};
-const voivodeshipValidation = (voivodeship) => {
-  if (voivodeship.length < 0 || voivodeship.length > 30) {
-    throw createError(400, "voivodeship name is too long");
-  }
-  return voivodeship;
 };
 
 //user table
@@ -94,9 +90,9 @@ const userInfoValidation = (userInfo) => {
 //address table
 const detailsValidation = async (userInfo) => {
   const address = {
+    uuid: userInfo.uuid,
     country: await countryValidation(userInfo.country),
     city: cityNameValidation(userInfo.city),
-    voivodeship: voivodeshipValidation(userInfo.voivodeship),
     yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
     biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
     hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),

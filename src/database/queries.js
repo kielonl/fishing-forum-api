@@ -2,7 +2,7 @@ const insertIntoUserQuery = (userInfo) => {
   return `INSERT INTO public.user (username,password,created_at) VALUES('${userInfo.username}','${userInfo.password}','${userInfo.date}') RETURNING *`;
 };
 const insertIntoDetailsQuery = (userInfo) => {
-  return `INSERT INTO public.details (country,city,voivodeship,created_at) VALUES('${userInfo.country}','${userInfo.city}','${userInfo.voivodeship}','${userInfo.date}') RETURNING *`;
+  return `INSERT INTO public.details (country,city,created_at) VALUES('${userInfo.country}','${userInfo.city}','${userInfo.date}') RETURNING *`;
 };
 
 const appendUUIDToUser = (userUUID, detailsUUID) => {
