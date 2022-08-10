@@ -1,5 +1,5 @@
 const insertIntoUserQuery = (userInfo) => {
-  return `INSERT INTO public.user (username,password,years_of_experience,has_fishing_card,biggest_catch,created_at) VALUES('${userInfo.username}','${userInfo.password}','${userInfo.yearsOfExperience}','${userInfo.hasFishingCard}','${userInfo.biggestCatch}','${userInfo.date}') RETURNING *`;
+  return `INSERT INTO public.user (username,password,created_at) VALUES('${userInfo.username}','${userInfo.password}','${userInfo.date}') RETURNING *`;
 };
 const insertIntoDetailsQuery = (userInfo) => {
   return `INSERT INTO public.details (country,city,voivodeship,created_at) VALUES('${userInfo.country}','${userInfo.city}','${userInfo.voivodeship}','${userInfo.date}') RETURNING *`;

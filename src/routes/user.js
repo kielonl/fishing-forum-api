@@ -28,20 +28,22 @@ module.exports = function (app) {
 
   app.post("/user/createUser", async (request, response) => {
     const user = userInfoValidation(request.body);
-    user.date = new Date().toLocaleString();
     const res = await dbQuery(insertIntoUserQuery(user));
     response.code(201).send({ data: res });
   });
   app.post("/user/createDetails", async (request, response) => {
     const details = await detailsValidation(request.body);
-    details.date = new Date().toLocaleString();
     console.log(details);
     const res = await dbQuery(insertIntoDetailsQuery(details));
-    const res1 = await dbQuery(
-      appendUUIDToUser("f9f85c32-23fd-4257-bbe6-363db65b9072", res.details_id)
-    );
+    console.log("------------");
     console.log(res);
-    console.log(res1);
+    console.log("------------");
+    const res1 = await dbQuery(
+      appendUUIDToUser(
+        "8f1a956a-dadf-47f6-8d52-bf7477c15b29",
+        res[0].details_id
+      )
+    );
     response.code(201).send({ data: res, data1: res1 });
   });
 };

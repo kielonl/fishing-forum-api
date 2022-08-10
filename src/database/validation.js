@@ -35,22 +35,28 @@ const passwordHashing = (password) => {
   return password;
 };
 
-const yearsOfExperienceValidation = (yearsOfExperience) => {
-  if (yearsOfExperience < 0 || yearsOfExperience > 120)
-    throw createError(400, "maxmimum years of experience is 120");
+const yearsOfExperienceValidation = (yearsOfExperience = null) => {
+  if (yearsOfExperience !== null) {
+    if (yearsOfExperience < 0 || yearsOfExperience > 120)
+      throw createError(400, "maxmimum years of experience is 120");
+  }
   return yearsOfExperience;
 };
 
-const biggestCatchValidadtion = (biggestCatch) => {
-  if (biggestCatch < 0 || biggestCatch > 102)
-    throw createError(400, "fish cannot be that big");
+const biggestCatchValidadtion = (biggestCatch = null) => {
+  if (biggestCatch !== null) {
+    if (biggestCatch < 0 || biggestCatch > 1002)
+      throw createError(400, "fish cannot be that big");
+  }
   return biggestCatch;
 };
 
-const fishingCardValidation = (hasFishingCard) => {
-  if (typeof hasFishingCard !== "boolean")
-    throw createError(400, "answer must be yes or no");
-  return hasFishingCard;
+const fishingCardValidation = (hasFishingCard = null) => {
+  if (hasFishingCard !== null) {
+    if (typeof hasFishingCard !== "boolean")
+      throw createError(400, "answer must be yes or no");
+  }
+  return null;
 };
 
 const countryValidation = async (country) => {
@@ -60,7 +66,6 @@ const countryValidation = async (country) => {
   if (!res) {
     throw createError(400, "there is no such country");
   }
-  console.log(country);
   return country;
 };
 const cityNameValidation = (city) => {
@@ -81,9 +86,7 @@ const userInfoValidation = (userInfo) => {
   const user = {
     username: usernameValidation(userInfo.username),
     password: passwordHashing(userInfo.password),
-    yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
-    biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
-    hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
+    date: new Date().toLocaleString(),
   };
   return user;
 };
@@ -94,6 +97,10 @@ const detailsValidation = async (userInfo) => {
     country: await countryValidation(userInfo.country),
     city: cityNameValidation(userInfo.city),
     voivodeship: voivodeshipValidation(userInfo.voivodeship),
+    yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
+    biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
+    hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
+    date: new Date().toLocaleString(),
   };
   return address;
 };
