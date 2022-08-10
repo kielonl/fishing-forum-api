@@ -14,7 +14,6 @@ const {
 
 module.exports = function (app) {
   app.post("/user", async (request, response) => {
-    response.type("application/json").code(200);
     const res = await dbQuery(selectQuery("public.user"));
     response.code(200).send({ data: res });
   });

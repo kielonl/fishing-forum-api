@@ -2,22 +2,19 @@ const createError = require("http-errors");
 
 require("dotenv").config();
 
-const {
-  selectQuery,
-  selectQueryWithCondition,
-} = require("../database/queries");
+const { selectQueryWithCondition } = require("../database/queries");
 
 const { dbQuery } = require("../database/database");
 
 const crypto = require("crypto");
 
 //used in this file only
-const isLengthOK = (minLength, maxLength, string) => {
-  if (string.length < minLength || string.length > maxLength) return false;
-  return true;
+const isSizeOK = (minLength, maxLength, string) => {
+  return string < minLength || string > maxLength;
 };
+
 const usernameValidation = (username) => {
-  if (!isLengthOK(3, 18, username))
+  if (isSizeOK(3, 18, username.length))
     throw createError(
       400,
       "username length must be between 3 and 18 characters"
@@ -27,7 +24,7 @@ const usernameValidation = (username) => {
 };
 
 const passwordHashing = (password) => {
-  if (!isLengthOK(3, 18, password))
+  if (isSizeOK(3, 18, password.length))
     return { errorMessage: "password length too long or too short" };
   const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
   password = hasher.update(password).digest("hex");
@@ -36,16 +33,16 @@ const passwordHashing = (password) => {
 
 const yearsOfExperienceValidation = (yearsOfExperience = null) => {
   if (yearsOfExperience !== null) {
-    if (yearsOfExperience < 0 || yearsOfExperience > 120)
-      throw createError(400, "maxmimum years of experience is 120");
+    if (isSizeOK(0, 120, yearsOfExperience))
+      throw createError(400, "maximum years of experience is 120");
   }
   return yearsOfExperience;
 };
 
 const biggestCatchValidadtion = (biggestCatch = null) => {
   if (biggestCatch !== null) {
-    if (biggestCatch < 0 || biggestCatch > 1002)
-      throw createError(400, "fish cannot be that big");
+    if (isSizeOK(0, 1002, biggestCatch))
+      throw createError(400, "fish weight must be between 0 kg and 1 ton");
   }
   return biggestCatch;
 };
@@ -72,7 +69,7 @@ const cityNameValidation = (city) => {
     city.replaceAll(" ", "").length < 0 ||
     city.replaceAll(" ", "").length > 30
   ) {
-    throw createError(400, "city name is too long");
+    throw createError(400, "city name must be between 0 and 30 characters");
   }
   return city;
 };
