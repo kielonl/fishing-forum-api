@@ -1,10 +1,18 @@
 const fastify = require("fastify")({
   logger: true,
 });
-const port = 3000;
+const port = 8080;
 require("./routes/user")(fastify);
 require("./routes/login")(fastify);
+require("./routes/best")(fastify);
 
+fastify.register((fastify, options, done) => {
+  fastify.register(require("fastify-cors"), {
+    origin: "*",
+    methods: ["POST"],
+  });
+  done();
+});
 fastify.get("/", async (request, response) => {
   response.type("application/json").code(200);
   return { data: "" };
