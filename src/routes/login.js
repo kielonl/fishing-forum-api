@@ -16,9 +16,6 @@ module.exports = function (app) {
 
     if (parseInt(res[0].count) !== 1)
       throw createError(403, "incorrect credentials");
-    const result = await dbQuery(
-      getUserDetailsQuery(userInfo.username, passwordHashing(userInfo.password))
-    );
-    response.code(200).send(result);
+    response.code(200).send({ username: userInfo.username });
   });
 };

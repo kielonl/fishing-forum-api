@@ -32,6 +32,7 @@ module.exports = function (app) {
   app.post("/user/details", async (request, response) => {
     const details = await detailsValidation(request.body);
     const responseFromDetails = await dbQuery(insertIntoDetailsQuery(details));
+    console.log(responseFromDetails);
     const responseFromUser = await dbQuery(
       appendUUIDToUser(details.uuid, responseFromDetails[0].details_id)
     );
