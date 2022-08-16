@@ -9,6 +9,10 @@ const appendUUIDToUser = (userUUID, detailsUUID) => {
   return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'RETURNING *`;
 };
 
+const getUserByUUID = (userUUID) => {
+  return `SELECT * from public.user where user_id = '${userUUID}'`;
+};
+
 const selectQuery = (table) => {
   return `SELECT * FROM ${table}`;
 };
@@ -31,3 +35,4 @@ module.exports.selectQueryWithCondition = selectQueryWithCondition;
 module.exports.appendUUIDToUser = appendUUIDToUser;
 module.exports.loginQuery = loginQuery;
 module.exports.getUserDetailsQuery = getUserDetailsQuery;
+module.exports.getUserByUUID = getUserByUUID;

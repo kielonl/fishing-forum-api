@@ -5,6 +5,7 @@ const port = 8080;
 require("./routes/user")(fastify);
 require("./routes/login")(fastify);
 require("./routes/best")(fastify);
+require("./routes/post")(fastify);
 
 fastify.register((fastify, options, done) => {
   fastify.register(require("fastify-cors"), {

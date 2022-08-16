@@ -2,16 +2,24 @@ const createError = require("http-errors");
 
 require("dotenv").config();
 
-const { selectQueryWithCondition } = require("../database/queries");
+const {
+  selectQueryWithCondition,
+  getUserByUUID,
+} = require("../database/queries");
 
 const { dbQuery } = require("../database/database");
 
 const crypto = require("crypto");
+const { create } = require("domain");
 
 //used in this file only
 const isSizeOK = (minLength, maxLength, size) => {
   return size < minLength || size > maxLength;
 };
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const usernameValidation = (username) => {
   if (isSizeOK(3, 18, username.length))
@@ -71,6 +79,39 @@ const cityNameValidation = (city) => {
   return city;
 };
 
+//posts
+const titleValidation = (title) => {
+  console.log("------------------");
+  console.log(title.length);
+  console.log("------------------");
+
+  if (isSizeOK(5, 300, title.length)) {
+    throw createError(400, "Title length must be between 5 and 30 characters");
+  }
+  return capitalizeFirstLetter(title);
+};
+
+const contentValidation = (content) => {
+  if (!isSizeOK(20, 300, content.length)) {
+    throw createError(
+      400,
+      "Length of content must be between 20 and 300 characters"
+    );
+  }
+  return content;
+};
+
+const authorValidation = async (author_id) => {
+  // const res = await dbQuery(getUserByUUID(author_id));
+  // if (!res) {
+  //   throw createError(400, "there is no user with such UUID");
+  // }
+  const res = await dbQuery(getUserByUUID(author_id));
+  console.log(!res[0]);
+  console.log(author_id);
+  return author_id;
+};
+
 //user table
 const userInfoValidation = (userInfo) => {
   const user = {
@@ -96,6 +137,18 @@ const detailsValidation = async (userInfo) => {
   return details;
 };
 
+//post table
+
+const postValidation = async (postInfo) => {
+  const post = {
+    title: titleValidation(postInfo.title),
+    content: contentValidation(postInfo.content),
+    author: await authorValidation(postInfo.author),
+  };
+  return post;
+};
+
 module.exports.userInfoValidation = userInfoValidation;
 module.exports.detailsValidation = detailsValidation;
+module.exports.postValidation = postValidation;
 module.exports.passwordHashing = passwordHashing;

@@ -10,6 +10,7 @@ module.exports = function (app) {
     response.header("Access-Control-Allow-Methods", "POST");
 
     const userInfo = request.body;
+
     const res = await dbQuery(
       loginQuery(userInfo.username, passwordHashing(userInfo.password))
     );
