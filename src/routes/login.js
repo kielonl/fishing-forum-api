@@ -10,15 +10,12 @@ module.exports = function (app) {
     response.header("Access-Control-Allow-Methods", "POST");
 
     const userInfo = request.body;
+
     const res = await dbQuery(
       loginQuery(userInfo.username, passwordHashing(userInfo.password))
     );
 
-    if (parseInt(res[0].count) !== 1)
-      throw createError(403, "incorrect credentials");
-    const result = await dbQuery(
-      getUserDetailsQuery(userInfo.username, passwordHashing(userInfo.password))
-    );
-    response.code(200).send(result);
+    if (!res) throw createError(403, "incorrect credentials");
+    response.code(200).send({ result: res });
   });
 };
