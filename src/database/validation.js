@@ -10,7 +10,6 @@ const {
 const { dbQuery } = require("../database/database");
 
 const crypto = require("crypto");
-const { create } = require("domain");
 
 //used in this file only
 const isSizeOK = (minLength, maxLength, size) => {

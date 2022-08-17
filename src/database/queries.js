@@ -5,6 +5,10 @@ const insertIntoDetailsQuery = (userInfo) => {
   return `INSERT INTO public.details (country,city,has_fishing_card,years_of_experience,biggest_catch,created_at) VALUES('${userInfo.country}','${userInfo.city}','${userInfo.hasFishingCard}','${userInfo.yearsOfExperience}','${userInfo.biggestCatch}','${userInfo.date}') RETURNING *`;
 };
 
+const insertPostQuery = (postInfo) => {
+  return `INSERT INTO public.post (title,content,author) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}') RETURNING *`;
+};
+
 const appendUUIDToUser = (userUUID, detailsUUID) => {
   return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'RETURNING *`;
 };
@@ -14,7 +18,7 @@ const getUserByUUID = (userUUID) => {
 };
 
 const selectQuery = (table) => {
-  return `SELECT * FROM ${table}`;
+  return `SELECT  * FROM ${table} LIMIT 10`;
 };
 
 const selectQueryWithCondition = (table, parameter1, parameter2) => {
@@ -30,6 +34,7 @@ const getUserDetailsQuery = (username, password) => {
 };
 module.exports.insertIntoUserQuery = insertIntoUserQuery;
 module.exports.insertIntoDetailsQuery = insertIntoDetailsQuery;
+module.exports.insertPostQuery = insertPostQuery;
 module.exports.selectQuery = selectQuery;
 module.exports.selectQueryWithCondition = selectQueryWithCondition;
 module.exports.appendUUIDToUser = appendUUIDToUser;
