@@ -14,6 +14,12 @@ fastify.register((fastify, options, done) => {
   });
   done();
 });
+fastify.addHook("onRequest", (request, reply, done) => {
+  reply.header("Access-Control-Allow-Origin", "*");
+  reply.header("Access-Control-Allow-Methods", "GET");
+  reply.header("Access-Control-Allow-Methods", "POST");
+  done();
+});
 fastify.get("/", async (request, response) => {
   response.type("application/json").code(200);
   return { data: "" };

@@ -80,7 +80,7 @@ const cityNameValidation = (city) => {
 
 //posts
 const titleValidation = (title) => {
-  if (isSizeOK(5, 300, title.length)) {
+  if (isSizeOK(5, 30, title.length)) {
     throw createError(400, "Title length must be between 5 and 30 characters");
   }
   return capitalizeFirstLetter(title);
@@ -98,8 +98,6 @@ const contentValidation = (content) => {
 
 const authorValidation = async (author_id) => {
   const res = await dbQuery(getUserByUUID(author_id));
-  console.log(!res[0]);
-  console.log(author_id);
   return author_id;
 };
 
@@ -115,7 +113,6 @@ const userInfoValidation = (userInfo) => {
 
 //address table
 const detailsValidation = async (userInfo) => {
-  console.log(userInfo.hasFishingCard);
   const details = {
     uuid: userInfo.uuid,
     country: await countryValidation(userInfo.country),
