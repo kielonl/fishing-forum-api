@@ -12,5 +12,12 @@ module.exports = function (app) {
     const data = request.body;
     const res = await postValidation(data);
     response.code(201).send({ result: res });
+
+    app.get("/post", (request, response) => {
+      response.header("Access-Control-Allow-Origin", "*");
+      response.header("Access-Control-Allow-Methods", "GET");
+
+      response.code(200).send({ result: "sefasdf" });
+    });
   });
 };

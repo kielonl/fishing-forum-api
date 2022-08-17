@@ -81,10 +81,6 @@ const cityNameValidation = (city) => {
 
 //posts
 const titleValidation = (title) => {
-  console.log("------------------");
-  console.log(title.length);
-  console.log("------------------");
-
   if (isSizeOK(5, 300, title.length)) {
     throw createError(400, "Title length must be between 5 and 30 characters");
   }
@@ -92,7 +88,7 @@ const titleValidation = (title) => {
 };
 
 const contentValidation = (content) => {
-  if (!isSizeOK(20, 300, content.length)) {
+  if (isSizeOK(20, 300, content.length)) {
     throw createError(
       400,
       "Length of content must be between 20 and 300 characters"
@@ -102,10 +98,6 @@ const contentValidation = (content) => {
 };
 
 const authorValidation = async (author_id) => {
-  // const res = await dbQuery(getUserByUUID(author_id));
-  // if (!res) {
-  //   throw createError(400, "there is no user with such UUID");
-  // }
   const res = await dbQuery(getUserByUUID(author_id));
   console.log(!res[0]);
   console.log(author_id);
