@@ -2,9 +2,6 @@ const createError = require("http-errors");
 
 module.exports = function (app) {
   app.get("/best", (request, response) => {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Methods", "GET");
-
     const images = [
       {
         url: "https://imgcdn1.przelom.pl/im/v1/news-900-widen-wm/2020/03/30/30423_1585584202_97964700.jpg",
