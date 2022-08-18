@@ -16,6 +16,6 @@ module.exports = function (app) {
         caption: "Slide 3",
       },
     ];
-    response.code(200).send({ images });
+    response.code(200).send(images);
   });
 };
