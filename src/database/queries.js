@@ -25,8 +25,8 @@ const selectQueryWithCondition = (table, parameter1, parameter2) => {
   return `SELECT exists(SELECT "NAME" FROM ${table} WHERE "${parameter1}" = '${parameter2}')`;
 };
 
-const loginQuery = (username, password) => {
-  return `SELECT username,user_id FROM public.user WHERE username='${username}' AND password = '${password}'`;
+const loginQuery = (userInfo) => {
+  return `SELECT username,user_id FROM public.user WHERE username='${userInfo.username}' AND password = '${userInfo.password}'`;
 };
 
 const getUserDetailsQuery = (username, password) => {
