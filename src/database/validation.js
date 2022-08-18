@@ -27,7 +27,6 @@ const createDate = () => {
   // const month = (date.getMonth() + 1) * 100; // months are numbered 0-11 in JavaScript, * 100 to move two digits to the left. 20210011 => 20211100
   // const day = date.getDate(); // 20211100 => 20211124
   const date = new Date();
-  console.log("----------------");
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate() + 1;
@@ -35,7 +34,6 @@ const createDate = () => {
   const seconds = date.getSeconds();
   const minutes = date.getMinutes();
   const hours = date.getHours();
-  console.log("----------------");
   const result = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
   return result;
 };
@@ -148,13 +146,11 @@ const detailsValidation = async (userInfo) => {
 //post table
 
 const postValidation = async (postInfo) => {
-  const yourDate = createDate();
-  console.log(yourDate);
   const post = {
     title: titleValidation(postInfo.title),
     content: contentValidation(postInfo.content),
     author: await authorValidation(postInfo.author),
-    date: yourDate,
+    date: createDate(),
   };
   return post;
 };
