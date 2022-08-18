@@ -6,7 +6,7 @@ const insertIntoDetailsQuery = (userInfo) => {
 };
 
 const insertPostQuery = (postInfo) => {
-  return `INSERT INTO public.post (title,content,author) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}') RETURNING *`;
+  return `INSERT INTO public.post (title,content,author,created_at) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}','${postInfo.date}') RETURNING *`;
 };
 
 const appendUUIDToUser = (userUUID, detailsUUID) => {
@@ -18,7 +18,7 @@ const getUserByUUID = (userUUID) => {
 };
 
 const selectQuery = (table) => {
-  return `SELECT  * FROM ${table} LIMIT 10`;
+  return `SELECT  * FROM ${table} ORDER BY created_at DESC LIMIT 10`;
 };
 
 const selectQueryWithCondition = (table, parameter1, parameter2) => {
