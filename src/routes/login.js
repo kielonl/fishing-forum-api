@@ -1,10 +1,7 @@
 const createError = require("http-errors");
 
 const { dbQuery } = require("../database/database");
-const {
-  passwordHashing,
-  userInfoValidation,
-} = require("../database/validation");
+const { userInfoValidation } = require("../database/validation");
 const { loginQuery } = require("../database/queries");
 
 module.exports = function (app) {

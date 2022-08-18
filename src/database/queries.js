@@ -6,7 +6,7 @@ const insertIntoDetailsQuery = (userInfo) => {
 };
 
 const insertPostQuery = (postInfo) => {
-  return `INSERT INTO public.post (title,content,author,created_at) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}','${postInfo.date}') RETURNING *`;
+  return `INSERT INTO public.post (title,content,author ) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}') RETURNING *`;
 };
 
 const appendUUIDToUser = (userUUID, detailsUUID) => {

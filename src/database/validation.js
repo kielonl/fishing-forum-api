@@ -20,19 +20,6 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const createDate = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate() + 1;
-
-  const seconds = date.getSeconds();
-  const minutes = date.getMinutes();
-  const hours = date.getHours();
-  const result = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-  return result;
-};
-
 const usernameValidation = (username) => {
   if (isSizeOK(3, 18, username.length))
     throw createError(
@@ -145,7 +132,6 @@ const postValidation = async (postInfo) => {
     title: titleValidation(postInfo.title),
     content: contentValidation(postInfo.content),
     author: await authorValidation(postInfo.author),
-    date: createDate(),
   };
   return post;
 };
