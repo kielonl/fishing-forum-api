@@ -7,7 +7,6 @@ const { loginQuery } = require("../database/queries");
 module.exports = function (app) {
   app.post("/auth/login", async (request, response) => {
     let userInfo = request.body;
-    console.log(userInfo);
     userInfo = userInfoValidation(userInfo);
     const res = await dbQuery(loginQuery(userInfo));
 
