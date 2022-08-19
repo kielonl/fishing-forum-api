@@ -6,7 +6,7 @@ const insertIntoDetailsQuery = (userInfo) => {
 };
 
 const insertPostQuery = (postInfo) => {
-  return `INSERT INTO public.post (title,content,author) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}') RETURNING *`;
+  return `INSERT INTO public.post (title,content,author ) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}') RETURNING *`;
 };
 
 const appendUUIDToUser = (userUUID, detailsUUID) => {
@@ -18,15 +18,15 @@ const getUserByUUID = (userUUID) => {
 };
 
 const selectQuery = (table) => {
-  return `SELECT  * FROM ${table} LIMIT 10`;
+  return `SELECT  * FROM ${table} ORDER BY created_at DESC LIMIT 10`;
 };
 
 const selectQueryWithCondition = (table, parameter1, parameter2) => {
   return `SELECT exists(SELECT "NAME" FROM ${table} WHERE "${parameter1}" = '${parameter2}')`;
 };
 
-const loginQuery = (username, password) => {
-  return `SELECT username,user_id FROM public.user WHERE username='${username}' AND password = '${password}'`;
+const loginQuery = (userInfo) => {
+  return `SELECT username,user_id FROM public.user WHERE username='${userInfo.username}' AND password = '${userInfo.password}'`;
 };
 
 const getUserDetailsQuery = (username, password) => {

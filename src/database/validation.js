@@ -16,9 +16,9 @@ const isSizeOK = (minLength, maxLength, size) => {
   return size < minLength || size > maxLength;
 };
 
-function capitalizeFirstLetter(string) {
+const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
 
 const usernameValidation = (username) => {
   if (isSizeOK(3, 18, username.length))
