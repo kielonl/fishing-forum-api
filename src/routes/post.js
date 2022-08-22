@@ -1,5 +1,3 @@
-const createError = require("http-errors");
-
 const { dbQuery } = require("../database/database");
 
 const { postValidation } = require("../database/validation");

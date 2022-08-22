@@ -5,6 +5,7 @@ const {
   selectQuery,
   insertIntoDetailsQuery,
   appendUUIDToUser,
+  getUserByUUID,
 } = require("../database/queries.js");
 
 const {
@@ -18,9 +19,9 @@ module.exports = function (app) {
     response.code(200).send({ data: res });
   });
   //get user by uuid
-  app.post("/user/:id", async (request, response) => {
+  app.get("/user/:id", async (request, response) => {
     response.type("application/json").code(200);
-    const res = await dbQuery(selectUserByUUIDQuery(request.params.id));
+    const res = await dbQuery(getUserByUUID(request.params.id));
     response.code(200).send({ data: res });
   });
 

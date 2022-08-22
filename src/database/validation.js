@@ -5,6 +5,11 @@ require("dotenv").config();
 const {
   selectQueryWithCondition,
   getUserByUUID,
+  checkUserQuery,
+  getCountQuery,
+  getPostByUUID,
+  getReactionByPostUUID,
+  updateReactionCount,
 } = require("../database/queries");
 
 const { dbQuery } = require("../database/database");
@@ -102,9 +107,34 @@ const contentValidation = (content) => {
   return content;
 };
 
-const authorValidation = async (author_id) => {
-  const res = await dbQuery(getUserByUUID(author_id));
+const checkUser = async (author_id) => {
+  const res = await dbQuery(checkUserQuery(author_id));
+  if (!parseInt(res[0].count)) throw createError(400, "there is no such user");
   return author_id;
+};
+
+const checkPost = async (post_id) => {
+  const res = await dbQuery(getPostByUUID(post_id));
+  console.log("asdfasdf");
+  console.log(parseInt(res[0].count));
+  if (!parseInt(res[0].count)) throw createError(400, "there is no such post");
+  return post_id;
+};
+
+const getCount = async (post_id, type = increase) => {
+  const count = await dbQuery(getCountQuery(post_id));
+
+  console.log(count.length);
+  if (count.length === 0) {
+    return 1;
+  }
+  if (type === "increase") {
+    return parseInt((count[0].count += 1));
+  }
+  if (type === "decrease") {
+    return parseInt((count[0].count -= 1));
+  }
+  throw createError(400, "unknown error");
 };
 
 const imageValidation = (image = null) => {
@@ -143,13 +173,33 @@ const postValidation = async (postInfo) => {
   const post = {
     title: titleValidation(postInfo.title),
     content: contentValidation(postInfo.content),
-    author: await authorValidation(postInfo.author),
+    author: await checkUser(postInfo.author),
     image: imageValidation(postInfo.image),
   };
   return post;
 };
 
+//reactions table
+
+const reactionValidation = async (reactionInfo) => {
+  const test = await dbQuery(getReactionByPostUUID(reactionInfo.post_id));
+  console.log(test);
+  if (test[0].length !== 0) {
+    const res = await dbQuery(
+      updateReactionCount(test[0].reaction_id, parseInt(test[0].count) + 1)
+    );
+    return;
+  }
+  const reaction = {
+    user_id: await checkUser(reactionInfo.user_id),
+    post_id: await checkPost(reactionInfo.post_id),
+    count: await getCount(reactionInfo.post_id, "increase"),
+  };
+  return reaction;
+};
+
 module.exports.userInfoValidation = userInfoValidation;
 module.exports.detailsValidation = detailsValidation;
 module.exports.postValidation = postValidation;
+module.exports.reactionValidation = reactionValidation;
 module.exports.passwordHashing = passwordHashing;

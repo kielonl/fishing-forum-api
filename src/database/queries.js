@@ -9,12 +9,36 @@ const insertPostQuery = (postInfo) => {
   return `INSERT INTO public.post (title,content,author,image) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}','${postInfo.image}') RETURNING *`;
 };
 
+const addReactionQuery = (reactionInfo) => {
+  return `INSERT INTO public.reactions (user_id,post_id,count) VALUES ('${reactionInfo.user_id}','${reactionInfo.post_id}','${reactionInfo.count}') RETURNING *`;
+};
+
 const appendUUIDToUser = (userUUID, detailsUUID) => {
   return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'RETURNING *`;
 };
 
 const getUserByUUID = (userUUID) => {
-  return `SELECT * from public.user where user_id = '${userUUID}'`;
+  return `SELECT * FROM public.user WHERE user_id = '${userUUID}'`;
+};
+
+const getPostByUUID = (postUUID) => {
+  return `SELECT count(*) FROM public.post WHERE post_id = '${postUUID}'`;
+};
+
+const checkUserQuery = (userUUID) => {
+  return `SELECT count(*) FROM public.user WHERE user_id = '${userUUID}'`;
+};
+
+const getCountQuery = (postUUID) => {
+  return `SELECT count FROM public.reactions WHERE post_id = '${postUUID}' LIMIT 1 `;
+};
+
+const getReactionByPostUUID = (post_id) => {
+  return `SELECT * from public.reactions WHERE post_id = '${post_id}'`;
+};
+
+const updateReactionCount = (reaction_id, count) => {
+  return `UPDATE public.reactions SET count = '${count}' WHERE reaction_id = '${reaction_id}'`;
 };
 
 const selectQuery = (table) => {
@@ -41,3 +65,9 @@ module.exports.appendUUIDToUser = appendUUIDToUser;
 module.exports.loginQuery = loginQuery;
 module.exports.getUserDetailsQuery = getUserDetailsQuery;
 module.exports.getUserByUUID = getUserByUUID;
+module.exports.getReactionByPostUUID = getReactionByPostUUID;
+module.exports.addReactionQuery = addReactionQuery;
+module.exports.getPostByUUID = getPostByUUID;
+module.exports.checkUserQuery = checkUserQuery;
+module.exports.getCountQuery = getCountQuery;
+module.exports.updateReactionCount = updateReactionCount;
