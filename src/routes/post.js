@@ -11,6 +11,7 @@ module.exports = function (app) {
     const data = request.body;
     const res = await postValidation(data);
     const query = await dbQuery(insertPostQuery(res));
+
     response.code(201).send({ result: query });
   });
   app.get("/post", async (request, response) => {

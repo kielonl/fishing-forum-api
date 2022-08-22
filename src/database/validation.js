@@ -38,6 +38,12 @@ const passwordHashing = (password) => {
   return password;
 };
 
+const isB64AnImage = (b64) => {
+  const base64regex =
+    /^\s*data:([a-z]+\/[a-z0-9\-]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
+  return base64regex.test(b64);
+};
+
 const yearsOfExperienceValidation = (yearsOfExperience = null) => {
   if (yearsOfExperience !== null) {
     if (isSizeOK(0, 120, yearsOfExperience))
@@ -101,6 +107,12 @@ const authorValidation = async (author_id) => {
   return author_id;
 };
 
+const imageValidation = (image = null) => {
+  if (image === null) return image;
+  if (!isB64AnImage(image)) throw createError(400, "image is invalid");
+  return image;
+};
+
 //user table
 const userInfoValidation = (userInfo) => {
   const user = {
@@ -132,6 +144,7 @@ const postValidation = async (postInfo) => {
     title: titleValidation(postInfo.title),
     content: contentValidation(postInfo.content),
     author: await authorValidation(postInfo.author),
+    image: imageValidation(postInfo.image),
   };
   return post;
 };
