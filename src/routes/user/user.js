@@ -1,16 +1,15 @@
-const { dbQuery } = require("../database/database");
+const { dbQuery } = require("../../database/database");
 
 const {
   insertIntoUserQuery,
   selectQuery,
   insertIntoDetailsQuery,
   appendUUIDToUser,
-} = require("../database/queries.js");
+  selectUserByUUIDQuery,
+} = require("./userQueries");
 
-const {
-  userInfoValidation,
-  detailsValidation,
-} = require("../database/validation");
+const { detailsValidation } = require("./userValidation");
+const { userInfoValidation } = require("../login/loginValidation");
 
 module.exports = function (app) {
   app.get("/user", async (request, response) => {
@@ -18,13 +17,13 @@ module.exports = function (app) {
     response.code(200).send({ data: res });
   });
   //get user by uuid
-  app.post("/user/:id", async (request, response) => {
+  app.get("/user/:id", async (request, response) => {
     response.type("application/json").code(200);
     const res = await dbQuery(selectUserByUUIDQuery(request.params.id));
     response.code(200).send({ data: res });
   });
 
-  app.post("/user", async (request, response) => {
+  app.post("/user/create", async (request, response) => {
     const user = userInfoValidation(request.body);
     const res = await dbQuery(insertIntoUserQuery(user));
     response.code(201).send({ data: res });

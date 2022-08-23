@@ -2,11 +2,11 @@ const fastify = require("fastify")({
   logger: true,
 });
 const port = 8080;
-require("./routes/user")(fastify);
-require("./routes/login")(fastify);
-require("./routes/best")(fastify);
-require("./routes/post")(fastify);
-require("./routes/reactions")(fastify);
+require("./routes/user/user")(fastify);
+require("./routes/login/login")(fastify);
+require("./routes/best/best")(fastify);
+require("./routes/post/post")(fastify);
+require("./routes/reactions/reactions")(fastify);
 
 fastify.register((fastify, options, done) => {
   fastify.register(require("fastify-cors"), {
