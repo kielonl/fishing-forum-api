@@ -4,7 +4,13 @@ require("dotenv").config();
 
 const {
   selectQueryWithCondition,
+  selectQuery,
   getUserByUUID,
+  uniqueReactionQuery,
+  removeReactionQuery,
+  insertReactionQuery,
+  countReactionsQuery,
+  selectReactionsQuery,
 } = require("../database/queries");
 
 const { dbQuery } = require("../database/database");
@@ -139,6 +145,15 @@ const detailsValidation = async (userInfo) => {
 
 //post table
 
+const checkUser = async (userInfo) => {
+  console.log(dbQuery(getUserByUUID(userInfo.user_id)));
+  const isUser = await dbQuery(getUserByUUID(userInfo.user_id));
+  if (parseInt(isUser[0].count) === 0) {
+    throw createError(400, "invalid user");
+  }
+  return true;
+};
+
 const postValidation = async (postInfo) => {
   const post = {
     title: titleValidation(postInfo.title),
@@ -146,10 +161,52 @@ const postValidation = async (postInfo) => {
     author: await authorValidation(postInfo.author),
     image: imageValidation(postInfo.image),
   };
-  return post;
+
+  return { post };
+};
+
+const selectPosts = async (postInfo) => {
+  const res = await dbQuery(selectQuery("public.post"));
+  const likes = await dbQuery(countReactionsQuery(res[0].post_id));
+  // console.log(postInfo);
+  const result = [
+    {
+      post_id: res[0].post_id,
+      title: res[0].title,
+      content: res[0].content,
+      author: res[0].author,
+      created_at: res[0].created_at,
+      image: res[0].image,
+      likes: parseInt(likes[0].count) | null,
+      // isUserValid:checkUser()
+    },
+  ];
+  console.log(result);
+  const query = await dbQuery(selectQuery("public.post"));
+  return res;
+};
+
+const reactionValidation = async (reactionInfo) => {
+  const uniqueReaction = await dbQuery(uniqueReactionQuery(reactionInfo));
+  if (uniqueReaction[0].count === "1") {
+    const removeReaction = await dbQuery(removeReactionQuery(reactionInfo));
+    return removeReaction;
+  }
+  const insertReaction = await dbQuery(insertReactionQuery(reactionInfo));
+  return insertReaction;
+};
+
+const getReactions = async (reactionInfo) => {
+  const res = await dbQuery(countReactionsQuery(reactionInfo));
+  return parseInt(res[0].count);
 };
 
 module.exports.userInfoValidation = userInfoValidation;
 module.exports.detailsValidation = detailsValidation;
 module.exports.postValidation = postValidation;
+module.exports.reactionValidation = reactionValidation;
+module.exports.selectPosts = selectPosts;
+module.exports.getReactions = getReactions;
+module.exports.checkUser = checkUser;
+
 module.exports.passwordHashing = passwordHashing;

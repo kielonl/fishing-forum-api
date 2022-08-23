@@ -2,9 +2,13 @@ const createError = require("http-errors");
 
 const { dbQuery } = require("../database/database");
 
-const { postValidation } = require("../database/validation");
+const { postValidation, selectPosts } = require("../database/validation");
 
-const { insertPostQuery, selectQuery } = require("../database/queries");
+const {
+  insertPostQuery,
+  selectQuery,
+  selectReactionsQuery,
+} = require("../database/queries");
 
 module.exports = function (app) {
   app.post("/post/create", async (request, response) => {
@@ -14,8 +18,10 @@ module.exports = function (app) {
 
     response.code(201).send({ result: query });
   });
-  app.get("/post", async (request, response) => {
-    const query = await dbQuery(selectQuery("public.post"));
+  app.post("/post", async (request, response) => {
+    console.log(request.body);
+    const query = selectPosts(request.body);
+
     response.code(200).send({ result: query });
   });
 };

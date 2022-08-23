@@ -6,7 +6,23 @@ const insertIntoDetailsQuery = (userInfo) => {
 };
 
 const insertPostQuery = (postInfo) => {
-  return `INSERT INTO public.post (title,content,author,image) VALUES ('${postInfo.title}','${postInfo.content}','${postInfo.author}','${postInfo.image}') RETURNING *`;
+  return `INSERT INTO public.post (title,content,author,image) VALUES ('${postInfo.post.title}','${postInfo.post.content}','${postInfo.post.author}','${postInfo.post.image}') RETURNING *`;
+};
+
+const uniqueReactionQuery = (reactionInfo) => {
+  return `SELECT COUNT(*) FROM public.reactions WHERE post_id = '${reactionInfo.post_id}' AND user_id = '${reactionInfo.user_id}'`;
+};
+
+const insertReactionQuery = (reactionInfo) => {
+  return `INSERT INTO public.reactions (user_id,post_id,value) VALUES ('${reactionInfo.user_id}','${reactionInfo.post_id}','${reactionInfo.value}')RETURNING *`;
+};
+
+const removeReactionQuery = (reactionInfo) => {
+  return `DELETE FROM public.reactions WHERE post_id = '${reactionInfo.post_id}' AND user_id = '${reactionInfo.user_id}'`;
+};
+
+const countReactionsQuery = (post_id) => {
+  return `SELECT COUNT(value) FROM public.reactions WHERE post_id = '${post_id}'`;
 };
 
 const appendUUIDToUser = (userUUID, detailsUUID) => {
@@ -14,11 +30,16 @@ const appendUUIDToUser = (userUUID, detailsUUID) => {
 };
 
 const getUserByUUID = (userUUID) => {
-  return `SELECT * from public.user where user_id = '${userUUID}'`;
+  return `SELECT COUNT(*) from public.user where user_id = '${userUUID}'`;
 };
 
 const selectQuery = (table) => {
-  return `SELECT  * FROM ${table} ORDER BY created_at DESC LIMIT 10`;
+  return `SELECT * FROM ${table} ORDER BY created_at DESC LIMIT 10`;
+};
+
+const selectReactionsQuery = (post_id) => {
+  // return ` (SELECT * FROM public.reactions) UNION ALL (SELECT * from public.post) `;
+  return `SELECT * FROM public.reactions INNER JOIN public.post ON 'reactions.post_id' = '${post_id}'`;
 };
 
 const selectQueryWithCondition = (table, parameter1, parameter2) => {
@@ -41,3 +62,8 @@ module.exports.appendUUIDToUser = appendUUIDToUser;
 module.exports.loginQuery = loginQuery;
 module.exports.getUserDetailsQuery = getUserDetailsQuery;
 module.exports.getUserByUUID = getUserByUUID;
+module.exports.insertReactionQuery = insertReactionQuery;
+module.exports.uniqueReactionQuery = uniqueReactionQuery;
+module.exports.removeReactionQuery = removeReactionQuery;
+module.exports.countReactionsQuery = countReactionsQuery;
+module.exports.selectReactionsQuery = selectReactionsQuery;
