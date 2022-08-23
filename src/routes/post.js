@@ -19,7 +19,6 @@ module.exports = function (app) {
     response.code(201).send({ result: query });
   });
   app.post("/post", async (request, response) => {
-    console.log(request.body);
     const query = selectPosts(request.body);
 
     response.code(200).send({ result: query });

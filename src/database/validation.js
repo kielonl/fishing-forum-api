@@ -5,7 +5,7 @@ require("dotenv").config();
 const {
   selectQueryWithCondition,
   selectQuery,
-  getUserByUUID,
+  userExistsByUUID,
   uniqueReactionQuery,
   removeReactionQuery,
   insertReactionQuery,
@@ -109,7 +109,7 @@ const contentValidation = (content) => {
 };
 
 const authorValidation = async (author_id) => {
-  const res = await dbQuery(getUserByUUID(author_id));
+  const res = await dbQuery(userExistsByUUID(author_id));
   return author_id;
 };
 
@@ -146,8 +146,7 @@ const detailsValidation = async (userInfo) => {
 //post table
 
 const checkUser = async (userInfo) => {
-  console.log(dbQuery(getUserByUUID(userInfo.user_id)));
-  const isUser = await dbQuery(getUserByUUID(userInfo.user_id));
+  const isUser = await dbQuery(userExistsByUUID(userInfo.user_id));
   if (parseInt(isUser[0].count) === 0) {
     throw createError(400, "invalid user");
   }
@@ -166,23 +165,20 @@ const postValidation = async (postInfo) => {
 };
 
 const selectPosts = async (postInfo) => {
+  const result = [];
   const res = await dbQuery(selectQuery("public.post"));
-  const likes = await dbQuery(countReactionsQuery(res[0].post_id));
-  // console.log(postInfo);
-  const result = [
-    {
-      post_id: res[0].post_id,
-      title: res[0].title,
-      content: res[0].content,
-      author: res[0].author,
-      created_at: res[0].created_at,
-      image: res[0].image,
-      likes: parseInt(likes[0].count) | null,
-      // isUserValid:checkUser()
-    },
-  ];
-  console.log(result);
-  const query = await dbQuery(selectQuery("public.post"));
+  for (let index = 0; index < 10; index++) {
+    const likes = await dbQuery(countReactionsQuery(res[index].post_id));
+    result.push({
+      post_id: res[index].post_id,
+      title: res[index].title,
+      content: res[index].content,
+      author: res[index].author,
+      created_at: res[index].created_at,
+      image: res[index].image,
+      likes: parseInt(likes[0]?.count) | null,
+    });
+  }
   return res;
 };
 

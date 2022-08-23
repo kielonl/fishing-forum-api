@@ -29,7 +29,7 @@ const appendUUIDToUser = (userUUID, detailsUUID) => {
   return `UPDATE public.user set details_id = '${detailsUUID}' where user_id = '${userUUID}'RETURNING *`;
 };
 
-const getUserByUUID = (userUUID) => {
+const userExistsByUUID = (userUUID) => {
   return `SELECT COUNT(*) from public.user where user_id = '${userUUID}'`;
 };
 
@@ -61,7 +61,7 @@ module.exports.selectQueryWithCondition = selectQueryWithCondition;
 module.exports.appendUUIDToUser = appendUUIDToUser;
 module.exports.loginQuery = loginQuery;
 module.exports.getUserDetailsQuery = getUserDetailsQuery;
-module.exports.getUserByUUID = getUserByUUID;
+module.exports.userExistsByUUID = userExistsByUUID;
 module.exports.insertReactionQuery = insertReactionQuery;
 module.exports.uniqueReactionQuery = uniqueReactionQuery;
 module.exports.removeReactionQuery = removeReactionQuery;
