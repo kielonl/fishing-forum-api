@@ -18,7 +18,6 @@ const checkUser = async (userInfo) => {
 };
 
 const reactionValidation = async (reactionInfo) => {
-  console.log(reactionInfo);
   const uniqueReaction = await dbQuery(uniqueReactionQuery(reactionInfo));
   if (uniqueReaction[0].count === "1") {
     const removeReaction = await dbQuery(removeReactionQuery(reactionInfo));

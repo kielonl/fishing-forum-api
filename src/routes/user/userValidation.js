@@ -58,7 +58,6 @@ const detailsValidation = async (userInfo) => {
     yearsOfExperience: yearsOfExperienceValidation(userInfo.yearsOfExperience),
     biggestCatch: biggestCatchValidadtion(userInfo.biggestCatch),
     hasFishingCard: fishingCardValidation(userInfo.hasFishingCard),
-    // date: new Date().toLocaleString(),
   };
   return details;
 };
