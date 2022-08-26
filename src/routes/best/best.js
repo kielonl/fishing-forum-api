@@ -1,5 +1,3 @@
-const createError = require("http-errors");
-
 module.exports = function (app) {
   app.get("/best", (request, response) => {
     const images = [
