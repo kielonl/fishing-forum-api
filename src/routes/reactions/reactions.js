@@ -5,8 +5,8 @@ module.exports = (app) => {
     const userInfo = request.body;
     const userValid = await checkUser(userInfo);
     if (userValid) {
-      const cos = await reactionValidation(userInfo);
-      response.code(200).send({ result: cos });
+      const result = await reactionValidation(userInfo);
+      response.code(200).send({ result: result });
     }
   });
 };

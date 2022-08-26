@@ -23,7 +23,7 @@ module.exports = function (app) {
     response.code(200).send({ data: res });
   });
 
-  app.post("/user/create", async (request, response) => {
+  app.post("/user", async (request, response) => {
     const user = userInfoValidation(request.body);
     const res = await dbQuery(insertIntoUserQuery(user));
     response.code(201).send({ data: res });
