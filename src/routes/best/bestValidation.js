@@ -1,6 +1,16 @@
 const { selectQuery, countReactionsQuery } = require("./bestQueries");
 const { dbQuery } = require("../../database/database");
 
+function compare(a, b) {
+  if (a.likes < b.likes) {
+    return -1;
+  }
+  if (a.likes > b.likes) {
+    return 1;
+  }
+  return 0;
+}
+
 const selectBest = async () => {
   const result = [];
   const res = await dbQuery(selectQuery("public.post"));
@@ -17,15 +27,7 @@ const selectBest = async () => {
       likes: parseInt(likes[0]?.count) | null,
     });
   }
-  result.sort((a, b) =>
-    a.likes > b.likes
-      ? 1
-      : a.likes === b.likes
-      ? a.size > b.size
-        ? 1
-        : -1
-      : -1
-  );
+  result.sort(compare);
   result.reverse();
   return result;
 };
