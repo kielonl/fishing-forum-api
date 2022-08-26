@@ -2,13 +2,7 @@ const { selectQuery, countReactionsQuery } = require("./bestQueries");
 const { dbQuery } = require("../../database/database");
 
 function compare(a, b) {
-  if (a.likes < b.likes) {
-    return -1;
-  }
-  if (a.likes > b.likes) {
-    return 1;
-  }
-  return 0;
+  return a.likes - b.likes;
 }
 
 const selectBest = async () => {
