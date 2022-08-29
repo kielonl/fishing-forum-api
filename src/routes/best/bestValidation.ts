@@ -1,12 +1,19 @@
-const { selectQuery, countReactionsQuery } = require("./bestQueries");
-const { dbQuery } = require("../../database/database");
+import { dbQuery } from "../../database/database";
+import { selectQuery, countReactionsQuery } from "./bestQueries";
 
-function compare(a, b) {
+function compare(a: { likes: number }, b: { likes: number }) {
   return a.likes - b.likes;
 }
 
 const selectBest = async () => {
-  const result = [];
+  const result: {
+    post_id: string;
+    title: string;
+    content: string;
+    author: string;
+    image: string;
+    likes: number;
+  }[] = [];
   const res = await dbQuery(selectQuery("public.post"));
   for (let index = 0; index < res.length; index++) {
     const likes = await dbQuery(countReactionsQuery(res[index].post_id));
@@ -17,7 +24,7 @@ const selectBest = async () => {
       content: res[index].content,
       author: res[index].author,
       image: res[index].image,
-      likes: parseInt(likes[0]?.count) | null,
+      likes: parseInt(likes[0]?.count),
     });
   }
   result.sort(compare);

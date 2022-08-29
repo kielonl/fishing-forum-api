@@ -1,15 +1,14 @@
-const createError = require("http-errors");
+import createError from "http-errors";
+import { ReactionInfo, UserInfo } from "../../types";
 
-const { dbQuery } = require("../../database/database");
-
-const {
+import {
   userExistsByUUID,
   uniqueReactionQuery,
   removeReactionQuery,
   insertReactionQuery,
-} = require("./reactionQueries");
+} from "./reactionQueries";
 
-const checkUser = async (userInfo) => {
+const checkUser = async (userInfo: UserInfo) => {
   const isUser = await dbQuery(userExistsByUUID(userInfo.user_id));
   if (parseInt(isUser[0].count) === 0) {
     throw createError(400, "invalid user");
@@ -17,7 +16,7 @@ const checkUser = async (userInfo) => {
   return true;
 };
 
-const reactionValidation = async (reactionInfo) => {
+const reactionValidation = async (reactionInfo: ReactionInfo) => {
   const uniqueReaction = await dbQuery(uniqueReactionQuery(reactionInfo));
   if (uniqueReaction[0].count === "1") {
     const removeReaction = await dbQuery(removeReactionQuery(reactionInfo));

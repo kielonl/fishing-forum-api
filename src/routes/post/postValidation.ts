@@ -1,37 +1,38 @@
-const createError = require("http-errors");
+import createError from "http-errors";
 
-const { dbQuery } = require("../../database/database");
-const {
+import { dbQuery } from "../../database/database";
+import { PostInfo } from "../../types";
+import {
   userExistsByUUID,
   selectQuery,
   didReactQuery,
   countReactionsQuery,
-} = require("./postQueries");
+} from "./postQueries";
 
-const isSizeOK = (minLength, maxLength, size) => {
+const isSizeOK = (minLength: number, maxLength: number, size: number) => {
   return size < minLength || size > maxLength;
 };
 
 // create Post
 
-const capitalizeFirstLetter = (string) => {
+const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const isB64AnImage = (b64) => {
+const isB64AnImage = (b64: string) => {
   const base64regex =
     /^\s*data:([a-z]+\/[a-z0-9\-]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
   return base64regex.test(b64);
 };
 
-const titleValidation = (title) => {
+const titleValidation = (title: string) => {
   if (isSizeOK(5, 30, title.length)) {
     throw createError(400, "Title length must be between 5 and 30 characters");
   }
   return capitalizeFirstLetter(title);
 };
 
-const contentValidation = (content) => {
+const contentValidation = (content: string) => {
   if (isSizeOK(20, 300, content.length)) {
     throw createError(
       400,
@@ -41,7 +42,7 @@ const contentValidation = (content) => {
   return content;
 };
 
-const authorValidation = async (author_id) => {
+const authorValidation = async (author_id: string) => {
   const res = await dbQuery(userExistsByUUID(author_id));
   return author_id;
 };
@@ -51,7 +52,7 @@ const imageValidation = (image = null) => {
   if (!isB64AnImage(image)) throw createError(400, "image is invalid");
   return image;
 };
-const postValidation = async (postInfo) => {
+const postValidation = async (postInfo: PostInfo) => {
   const post = {
     title: titleValidation(postInfo.title),
     content: contentValidation(postInfo.content),

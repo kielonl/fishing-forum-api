@@ -1,4 +1,4 @@
-const { Client } = require("pg");
+import { Client } from "pg";
 
 require("dotenv").config();
 
@@ -11,7 +11,7 @@ const client = new Client({
 });
 client.connect();
 
-const dbQuery = async (query) => {
+export const dbQuery = async (query: any) => {
   const result = await client.query(query);
   return result.rows;
 };

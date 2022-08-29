@@ -1,14 +1,14 @@
-const { dbQuery } = require("../../database/database");
+import { postValidation, selectPosts } from "./postValidation";
 
-const { postValidation, selectPosts } = require("./postValidation");
+import { insertPostQuery } from "./postQueries";
+import { FastifyInstance } from "fastify";
+import { dbQuery } from "../../database/database";
 
-const { insertPostQuery } = require("./postQueries");
-
-module.exports = function (app) {
+module.exports = function (app: FastifyInstance) {
   app.post("/post/create", async (request, response) => {
     const data = request.body;
     const res = await postValidation(data);
-    const query = await dbQuery(insertPostQuery(res));
+    const query = await dbQuery(insertPostQuery(res.post));
 
     response.code(201).send({ result: query });
   });
