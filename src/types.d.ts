@@ -9,7 +9,7 @@ export type PostInfo = {
   title: string;
   content: string;
   author: string;
-  image: string | null;
+  image: string;
 };
 
 export type ReactionInfo = {
@@ -23,7 +23,13 @@ export type DetailsInfo = {
   country: string;
   city: string;
   hasFishingCard: boolean;
-  yearsOfExperience: number;
-  biggestCatch: number;
+  yearsOfExperience: number | null;
+  biggestCatch: number | null;
 };
 export type ReactionInfo = { user_id: string; post_id: string; value: string };
+
+export type IdParam = {
+  uuid: string;
+};
+
+export type UserCredentials = Omit<UserInfo, "date", "user_id">;

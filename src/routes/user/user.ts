@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { dbQuery } from "../../database/database";
 
-import { DetailsInfo, UserInfo } from "../../types";
+import { DetailsInfo, IdParam, UserCredentials, UserInfo } from "../../types";
 
 import {
   insertIntoUserQuery,
@@ -19,13 +19,13 @@ module.exports = function (app: FastifyInstance) {
     response.code(200).send({ data: res });
   });
   //get user by uuid
-  app.get<{ Body: UserInfo }>("/user/:id", async (request, response) => {
+  app.get<{ Params: IdParam }>("/user/:id", async (request, response) => {
     response.type("application/json").code(200);
-    const res = await dbQuery(selectUserByUUIDQuery(request.params.id));
+    const res = await dbQuery(selectUserByUUIDQuery(request.params.uuid));
     response.code(200).send({ data: res });
   });
 
-  app.post<{ Body: UserInfo }>("/user", async (request, response) => {
+  app.post<{ Body: UserCredentials }>("/user", async (request, response) => {
     const user = await userRegistration(request.body);
     const res = await insertIntoUserQuery(user);
     response.code(201).send({ data: res });

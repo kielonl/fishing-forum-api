@@ -47,12 +47,12 @@ const authorValidation = async (author_id: string) => {
   return author_id;
 };
 
-const imageValidation = (image = null) => {
+const imageValidation = (image: string) => {
   if (image === null) return image;
   if (!isB64AnImage(image)) throw createError(400, "image is invalid");
   return image;
 };
-const postValidation = async (postInfo: PostInfo) => {
+export const postValidation = async (postInfo: PostInfo) => {
   const post = {
     title: titleValidation(postInfo.title),
     content: contentValidation(postInfo.content),
@@ -65,7 +65,7 @@ const postValidation = async (postInfo: PostInfo) => {
 
 // select Posts
 
-const didClick = async (user_id, post_id) => {
+const didClick = async (user_id: string, post_id: string) => {
   const result = await dbQuery(didReactQuery(user_id, post_id));
   if (result.length === 0) {
     return null;
@@ -73,7 +73,7 @@ const didClick = async (user_id, post_id) => {
   return result[0].value;
 };
 
-const selectPosts = async (user_id) => {
+export const selectPosts = async (user_id: string) => {
   const result = [];
   const res = await dbQuery(selectQuery("public.post"));
   for (let index = 0; index < 10; index++) {
@@ -87,13 +87,10 @@ const selectPosts = async (user_id) => {
       author: res[index].author,
       created_at: res[index].created_at,
       image: res[index].image,
-      likes: parseInt(likes[0]?.count) | null,
+      likes: parseInt(likes[0]?.count),
       reacted: response !== null ? true : false,
       reactedValue: response,
     });
   }
   return result;
 };
-
-module.exports.postValidation = postValidation;
-module.exports.selectPosts = selectPosts;
