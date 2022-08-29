@@ -2,17 +2,13 @@ import createError from "http-errors";
 
 require("dotenv").config();
 
-import {
-  selectQueryWithCondition,
-  checkUserByUsernameQuery,
-} from "./userQueries";
+import { checkIfCountryExists, checkUserByUsernameQuery } from "./userQueries";
 
 import {
   usernameValidation,
   passwordValidation,
 } from "../login/loginValidation";
-import { DetailsInfo, UserCredentials, UserInfo } from "../../types.js";
-import { dbQuery } from "../../database/database";
+import { DetailsInfo, UserCredentials } from "../../types.js";
 
 const isSizeOK = (minLength: number, maxLength: number, size: number) => {
   return size < minLength || size > maxLength;
@@ -47,9 +43,7 @@ const fishingCardValidation = (hasFishingCard: boolean) => {
 };
 
 const countryValidation = async (country: string) => {
-  const res = await dbQuery(
-    selectQueryWithCondition("countries", "NAME", country)
-  );
+  const res = await checkIfCountryExists(country);
   if (!res) {
     throw createError(400, "there is no such country");
   }
@@ -63,8 +57,8 @@ const cityNameValidation = (city: string) => {
 };
 
 export const userRegistration = async (userInfo: UserCredentials) => {
-  let userExists = await dbQuery(checkUserByUsernameQuery(userInfo.username));
-  userExists = parseInt(userExists[0].count);
+  let userExists = await checkUserByUsernameQuery(userInfo.username);
+
   if (userExists > 0) {
     throw createError(400, "username already exists");
   }

@@ -1,14 +1,18 @@
-import { FastifyInstance } from "fastify";
+import { fastify } from "../..";
+import { ReactionInfo, UserInfo } from "../../types";
 
-const { reactionValidation, checkUser } = require("./reactionValidation");
+import { reactionValidation, checkUser } from "./reactionValidation";
 
-module.exports = (app: FastifyInstance) => {
-  app.post("/reaction/add", async (request, response) => {
-    const userInfo = request.body;
-    const userValid = await checkUser(userInfo);
-    if (userValid) {
-      const result = await reactionValidation(userInfo);
-      response.code(200).send({ result: result });
+export const reactions = async () => {
+  fastify.post<{ Body: UserInfo }>(
+    "/reaction/add",
+    async (request, response) => {
+      const userInfo = request.body;
+      const userValid = await checkUser(userInfo);
+      if (userValid) {
+        const result = await reactionValidation(userInfo);
+        response.code(200).send({ result: result });
+      }
     }
-  });
+  );
 };

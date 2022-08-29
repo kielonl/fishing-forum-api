@@ -1,17 +1,27 @@
-import prisma from '../../prisma'
-import { UserInfo } from '../../types';
+import prisma from "../../prisma";
+import { UserInfo } from "../../types";
 
-
-export const loginQuery = async(userInfo:UserInfo) => {
-  // return `SELECT username,user_id FROM public.user WHERE username='${userInfo.username}' AND password = '${userInfo.password}'`;
+export const loginQuery = async (userInfo: UserInfo) => {
   const query = await prisma.user.findFirst({
     where: {
-      username:userInfo.username,
-      password:userInfo.password
+      AND: {
+        username: userInfo.username,
+        password: userInfo.password,
+      },
     },
-  })
-  return query
+    select: {
+      username: true,
+      user_id: true,
+    },
+  });
+  console.log(query);
+  return query;
 };
-export const checkUserByUsernameQuery = (username:string) => {
-  return `SELECT count(*) from public.user where username = '${username}'`;
+export const checkUserByUsernameQuery = async (username: string) => {
+  const query = await prisma.user.count({
+    where: {
+      username: username,
+    },
+  });
+  return query;
 };

@@ -1,6 +1,5 @@
 import createError from "http-errors";
 
-import { dbQuery } from "../../database/database";
 import { PostInfo } from "../../types";
 import {
   userExistsByUUID,
@@ -43,11 +42,11 @@ const contentValidation = (content: string) => {
 };
 
 const authorValidation = async (author_id: string) => {
-  const res = await dbQuery(userExistsByUUID(author_id));
+  const res = await userExistsByUUID(author_id);
   return author_id;
 };
 
-const imageValidation = (image: string) => {
+const imageValidation = (image: string | null = null) => {
   if (image === null) return image;
   if (!isB64AnImage(image)) throw createError(400, "image is invalid");
   return image;
@@ -60,25 +59,25 @@ export const postValidation = async (postInfo: PostInfo) => {
     image: imageValidation(postInfo.image),
   };
 
-  return { post };
+  return post;
 };
 
 // select Posts
 
 const didClick = async (user_id: string, post_id: string) => {
-  const result = await dbQuery(didReactQuery(user_id, post_id));
-  if (result.length === 0) {
+  const result = await didReactQuery(user_id, post_id);
+  if (!result) {
     return null;
   }
-  return result[0].value;
+  return result.value;
 };
 
 export const selectPosts = async (user_id: string) => {
   const result = [];
-  const res = await dbQuery(selectQuery("public.post"));
+  const res = await selectQuery();
   for (let index = 0; index < 10; index++) {
     const response = await didClick(res[index].post_id, user_id);
-    const likes = await dbQuery(countReactionsQuery(res[index].post_id));
+    // const likes = await countReactionsQuery(res[index].post_id);
 
     result.push({
       post_id: res[index].post_id,
@@ -87,7 +86,7 @@ export const selectPosts = async (user_id: string) => {
       author: res[index].author,
       created_at: res[index].created_at,
       image: res[index].image,
-      likes: parseInt(likes[0]?.count),
+      // likes: parseInt(likes[0]?.count),
       reacted: response !== null ? true : false,
       reactedValue: response,
     });

@@ -1,5 +1,9 @@
 import Fastify from "fastify";
+import { best } from "./routes/best/best";
 import login from "./routes/login/login";
+import { post } from "./routes/post/post";
+import { reactions } from "./routes/reactions/reactions";
+import { user } from "./routes/user/user";
 export const fastify = Fastify({
   logger: true,
 });
@@ -29,6 +33,10 @@ fastify.get("/", async (request, response) => {
   return { data: "" };
 });
 login();
+user();
+reactions();
+post();
+best();
 fastify.listen({ port: port, host: "0.0.0.0" }, (err, address) => {
   if (err) throw err;
   console.log(`server is now listening on port ${port}`);

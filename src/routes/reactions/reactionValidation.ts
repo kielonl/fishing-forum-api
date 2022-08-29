@@ -1,6 +1,6 @@
 import createError from "http-errors";
 import { ReactionInfo, UserInfo } from "../../types";
-
+import { dbQuery } from "../../database/database";
 import {
   userExistsByUUID,
   uniqueReactionQuery,
@@ -8,23 +8,20 @@ import {
   insertReactionQuery,
 } from "./reactionQueries";
 
-const checkUser = async (userInfo: UserInfo) => {
-  const isUser = await dbQuery(userExistsByUUID(userInfo.user_id));
-  if (parseInt(isUser[0].count) === 0) {
+export const checkUser = async (userInfo: UserInfo) => {
+  const isUser: number = await userExistsByUUID(userInfo.user_id);
+  if (!isUser) {
     throw createError(400, "invalid user");
   }
   return true;
 };
 
-const reactionValidation = async (reactionInfo: ReactionInfo) => {
-  const uniqueReaction = await dbQuery(uniqueReactionQuery(reactionInfo));
-  if (uniqueReaction[0].count === "1") {
-    const removeReaction = await dbQuery(removeReactionQuery(reactionInfo));
+export const reactionValidation = async (reactionInfo: ReactionInfo) => {
+  const uniqueReaction = await uniqueReactionQuery(reactionInfo);
+  if (uniqueReaction) {
+    const removeReaction = await removeReactionQuery(reactionInfo);
     return removeReaction;
   }
-  const insertReaction = await dbQuery(insertReactionQuery(reactionInfo));
+  const insertReaction = await insertReactionQuery(reactionInfo); //do poprawki
   return insertReaction;
 };
-
-module.exports.reactionValidation = reactionValidation;
-module.exports.checkUser = checkUser;
