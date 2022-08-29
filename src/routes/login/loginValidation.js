@@ -1,6 +1,11 @@
 const createError = require("http-errors");
-
 const crypto = require("crypto");
+
+const passwordHashing = (password) => {
+  const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
+  password = hasher.update(password).digest("hex");
+  return password;
+};
 
 const isSizeOK = (minLength, maxLength, size) => {
   return size < minLength || size > maxLength;
@@ -16,17 +21,19 @@ const usernameValidation = (username) => {
   return username.trim();
 };
 
-const passwordHashing = (password) => {
+const passwordValidation = (password) => {
   if (isSizeOK(3, 18, password.length))
-    return { errorMessage: "password length too long or too short" };
-  const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
-  password = hasher.update(password).digest("hex");
+    throw createError(
+      400,
+      "password length must be between 3 and 18 characters"
+    );
+  password = passwordHashing(password);
   return password;
 };
 
 const userInfoValidation = (userInfo) => {
   const user = {
-    username: usernameValidation(userInfo.username),
+    username: userInfo.username,
     password: passwordHashing(userInfo.password),
     date: new Date().toLocaleString(),
   };
@@ -34,3 +41,5 @@ const userInfoValidation = (userInfo) => {
 };
 
 module.exports.userInfoValidation = userInfoValidation;
+module.exports.usernameValidation = usernameValidation;
+module.exports.passwordValidation = passwordValidation;

@@ -24,6 +24,11 @@ const getUserDetailsQuery = (username, password) => {
 const selectUserByUUIDQuery = (userUUID) => {
   return `SELECT * from public.user where user_id = '${userUUID}'`;
 };
+
+const checkUserByUsernameQuery = (username) => {
+  return `SELECT count(*) from public.user where username = '${username}'`;
+};
+
 module.exports.insertIntoUserQuery = insertIntoUserQuery;
 module.exports.insertIntoDetailsQuery = insertIntoDetailsQuery;
 module.exports.selectQuery = selectQuery;
@@ -31,3 +36,4 @@ module.exports.selectQueryWithCondition = selectQueryWithCondition;
 module.exports.appendUUIDToUser = appendUUIDToUser;
 module.exports.getUserDetailsQuery = getUserDetailsQuery;
 module.exports.selectUserByUUIDQuery = selectUserByUUIDQuery;
+module.exports.checkUserByUsernameQuery = checkUserByUsernameQuery;

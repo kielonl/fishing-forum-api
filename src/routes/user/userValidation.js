@@ -1,10 +1,17 @@
 const createError = require("http-errors");
-
 const { dbQuery } = require("../../database/database.js");
 
 require("dotenv").config();
 
-const { selectQueryWithCondition } = require("./userQueries");
+const {
+  selectQueryWithCondition,
+  checkUserByUsernameQuery,
+} = require("./userQueries");
+
+const {
+  usernameValidation,
+  passwordValidation,
+} = require("../login/loginValidation");
 
 const isSizeOK = (minLength, maxLength, size) => {
   return size < minLength || size > maxLength;
@@ -50,6 +57,19 @@ const cityNameValidation = (city) => {
   return city;
 };
 
+const userRegistration = async (userInfo) => {
+  let userExists = await dbQuery(checkUserByUsernameQuery(userInfo.username));
+  userExists = parseInt(userExists[0].count);
+  if (userExists > 0) {
+    throw createError(400, "username already exists");
+  }
+  const user = {
+    username: usernameValidation(userInfo.username),
+    password: passwordValidation(userInfo.password),
+  };
+  return user;
+};
+
 const detailsValidation = async (userInfo) => {
   const details = {
     uuid: userInfo.uuid,
@@ -63,3 +83,4 @@ const detailsValidation = async (userInfo) => {
 };
 
 module.exports.detailsValidation = detailsValidation;
+module.exports.userRegistration = userRegistration;

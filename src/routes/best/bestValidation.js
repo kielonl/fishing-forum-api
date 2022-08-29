@@ -8,7 +8,6 @@ function compare(a, b) {
 const selectBest = async () => {
   const result = [];
   const res = await dbQuery(selectQuery("public.post"));
-  console.log(res.length);
   for (let index = 0; index < res.length; index++) {
     const likes = await dbQuery(countReactionsQuery(res[index].post_id));
 
