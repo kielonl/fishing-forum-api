@@ -8,8 +8,7 @@ const {
   selectUserByUUIDQuery,
 } = require("./userQueries");
 
-const { detailsValidation } = require("./userValidation");
-const { userInfoValidation } = require("../login/loginValidation");
+const { detailsValidation, userRegistration } = require("./userValidation");
 
 module.exports = function (app) {
   app.get("/user", async (request, response) => {
@@ -24,7 +23,7 @@ module.exports = function (app) {
   });
 
   app.post("/user", async (request, response) => {
-    const user = userInfoValidation(request.body);
+    const user = await userRegistration(request.body);
     const res = await dbQuery(insertIntoUserQuery(user));
     response.code(201).send({ data: res });
   });
