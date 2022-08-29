@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+import { fastify } from "../../index";
 import createError from "http-errors";
 
 import { UserCredentials, UserInfo } from "../../types";
@@ -7,8 +8,8 @@ import { userInfoValidation } from "./loginValidation";
 import { loginQuery } from "./loginQueries";
 import { user } from "@prisma/client";
 
-export default function (app: FastifyInstance) {
-  app.post<{ Body: UserCredentials }>(
+export default function login() {
+  fastify.post<{ Body: UserCredentials }>(
     "/auth/login",
     async (request, response) => {
       let userInfo: UserCredentials = request.body;

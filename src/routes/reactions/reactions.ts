@@ -1,6 +1,8 @@
+import { FastifyInstance } from "fastify";
+
 const { reactionValidation, checkUser } = require("./reactionValidation");
 
-module.exports = (app) => {
+module.exports = (app: FastifyInstance) => {
   app.post("/reaction/add", async (request, response) => {
     const userInfo = request.body;
     const userValid = await checkUser(userInfo);
