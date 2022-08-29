@@ -14,9 +14,9 @@ export const loginQuery = async (userInfo: UserInfo) => {
       user_id: true,
     },
   });
-  console.log(query);
   return query;
 };
+
 export const checkUserByUsernameQuery = async (username: string) => {
   const query = await prisma.user.count({
     where: {

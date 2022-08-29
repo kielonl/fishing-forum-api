@@ -11,7 +11,6 @@ export const insertPostQuery = async (postInfo: PostInfo) => {
       image: postInfo.image,
     },
   });
-  console.log(query);
   return query;
 };
 
@@ -32,12 +31,10 @@ export const selectQuery = async () => {
       created_at: "desc",
     },
   });
-  console.log(query);
   return query;
 };
 
 export const didReactQuery = async (post_id: string, user_id: string) => {
-  //do poprawki
   // return `SELECT value FROM public.reactions WHERE post_id = '${post_id}' AND user_id = '${user_id}'`;
   const query = await prisma.reactions.findFirst({
     where: {
@@ -47,18 +44,18 @@ export const didReactQuery = async (post_id: string, user_id: string) => {
       },
     },
   });
-  console.log(query);
   return query;
 };
 
 export const countReactionsQuery = async (post_id: string) => {
-  return `SELECT SUM(value) as count FROM public.reactions WHERE post_id = '${post_id}'`;
-  // const query = await prisma.reactions.findFirst({
-  //   where:{
-  //     post_id:post_id
-  //   },
-  //   _sum:{
-  //     value
-  //   }
-  // })
+  // return `SELECT SUM(value) as count FROM public.reactions WHERE post_id = '${post_id}'`;
+  const query = await prisma.reactions.aggregate({
+    _sum: {
+      value: true,
+    },
+    where: {
+      post_id: post_id,
+    },
+  });
+  return [query];
 };

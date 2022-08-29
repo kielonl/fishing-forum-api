@@ -35,10 +35,6 @@ export const removeReactionQuery = async (reactionInfo: ReactionInfo) => {
   return query;
 };
 
-export const selectReactionsQuery = async (post_id: string) => {
-  return `SELECT * FROM public.reactions INNER JOIN public.post ON 'reactions.post_id' = '${post_id}'`;
-};
-
 export const userExistsByUUID = async (userUUID: string) => {
   // return `SELECT COUNT(*) from public.user where user_id = '${userUUID}'`;
   const query = await prisma.user.count({

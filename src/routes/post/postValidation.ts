@@ -73,11 +73,21 @@ const didClick = async (user_id: string, post_id: string) => {
 };
 
 export const selectPosts = async (user_id: string) => {
-  const result = [];
+  const result: {
+    post_id: string;
+    title: string | null;
+    content: string;
+    author: string;
+    created_at: Date | null;
+    image: string | null;
+    likes: number;
+    reacted: boolean;
+    reactedValue: number | null;
+  }[] = [];
   const res = await selectQuery();
   for (let index = 0; index < 10; index++) {
     const response = await didClick(res[index].post_id, user_id);
-    // const likes = await countReactionsQuery(res[index].post_id);
+    const likes = await countReactionsQuery(res[index].post_id);
 
     result.push({
       post_id: res[index].post_id,
@@ -86,7 +96,7 @@ export const selectPosts = async (user_id: string) => {
       author: res[index].author,
       created_at: res[index].created_at,
       image: res[index].image,
-      // likes: parseInt(likes[0]?.count),
+      likes: likes[0]?._sum.value === null ? 0 : likes[0]?._sum.value,
       reacted: response !== null ? true : false,
       reactedValue: response,
     });

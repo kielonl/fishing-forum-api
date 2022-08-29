@@ -6,7 +6,7 @@ export const selectQuery = async () => {
     take: 5,
     where: {
       NOT: {
-        image: "undefined" || "null",
+        image: "null",
       },
     },
     orderBy: {
@@ -18,8 +18,7 @@ export const selectQuery = async () => {
 
 export const countReactionsQuery = async (post_id: string) => {
   // return `SELECT SUM(value) as count FROM public.reactions WHERE post_id = '${post_id}'`;
-  const query = await prisma.reactions.groupBy({
-    by: ["post_id"],
+  const query = await prisma.reactions.aggregate({
     _sum: {
       value: true,
     },
@@ -27,5 +26,5 @@ export const countReactionsQuery = async (post_id: string) => {
       post_id: post_id,
     },
   });
-  return query;
+  return [query];
 };

@@ -1,6 +1,5 @@
 import createError from "http-errors";
 import { ReactionInfo, UserInfo } from "../../types";
-import { dbQuery } from "../../database/database";
 import {
   userExistsByUUID,
   uniqueReactionQuery,
@@ -22,6 +21,6 @@ export const reactionValidation = async (reactionInfo: ReactionInfo) => {
     const removeReaction = await removeReactionQuery(reactionInfo);
     return removeReaction;
   }
-  const insertReaction = await insertReactionQuery(reactionInfo); //do poprawki
+  const insertReaction = await insertReactionQuery(reactionInfo);
   return insertReaction;
 };

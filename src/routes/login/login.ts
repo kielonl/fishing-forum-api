@@ -2,7 +2,6 @@ import { fastify } from "../../index";
 import createError from "http-errors";
 
 import { Login, UserCredentials, UserInfo } from "../../types";
-// import { dbQuery } from "../../database/database";
 import { userInfoValidation } from "./loginValidation";
 import { loginQuery } from "./loginQueries";
 
@@ -13,7 +12,6 @@ export default function login() {
       let userInfo: UserCredentials = request.body;
       userInfo = userInfoValidation(userInfo);
 
-      // const res: user | null = await loginQuery(userInfo);
       const res: Login | null = await loginQuery(userInfo);
       if (res === null) throw createError(403, "incorrect credentials");
       response.code(200).send(res);

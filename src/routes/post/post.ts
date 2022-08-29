@@ -2,7 +2,6 @@ import { postValidation, selectPosts } from "./postValidation";
 
 import { insertPostQuery } from "./postQueries";
 import { fastify } from "../..";
-import { dbQuery } from "../../database/database";
 import { IdParam, PostInfo } from "../../types";
 
 export const post = () => {
