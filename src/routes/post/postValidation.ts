@@ -86,7 +86,7 @@ export const selectPosts = async (user_id: string) => {
       author: res[index].author,
       created_at: res[index].created_at,
       image: res[index].image,
-      likes: likes[0]?._sum.value === null ? 0 : likes[0]?._sum.value,
+      likes: Number(likes[0]._sum.value),
       reacted: response !== null,
       reactedValue: response,
     });
