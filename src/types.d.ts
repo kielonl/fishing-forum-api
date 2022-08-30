@@ -41,15 +41,16 @@ export type Login = {
 
 export type UserCredentials = Omit<UserInfo, "date", "user_id">;
 
-export type Likes = {
-  likes: number;
-};
-
 export type Post = {
   post_id: string;
   title: string;
   content: string;
   author: string;
+  created_at: Date;
   image: string | null;
   likes: number;
+  reacted: boolean;
+  reactedValue: number | null;
 };
+
+export type Best = Omit<Post, "reacted" | "reactedValue">;

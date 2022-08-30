@@ -1,6 +1,6 @@
 import Fastify from "fastify";
-import { best } from "./routes/best/best";
 import login from "./routes/login/login";
+import { best } from "./routes/best/best";
 import { post } from "./routes/post/post";
 import { reactions } from "./routes/reactions/reactions";
 import { user } from "./routes/user/user";
@@ -8,12 +8,6 @@ export const fastify = Fastify({
   logger: true,
 });
 const port = 8080;
-
-// require("./routes/user/user")(fastify);
-// require("./routes/login/login")(fastify);
-// require("./routes/best/best")(fastify);
-// require("./routes/post/post")(fastify);
-// require("./routes/reactions/reactions")(fastify);
 
 fastify.register((fastify, options, done) => {
   fastify.register(require("fastify-cors"), {
