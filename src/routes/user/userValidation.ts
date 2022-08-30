@@ -14,14 +14,10 @@ const isSizeOK = (minLength: number, maxLength: number, size: number) => {
   return size < minLength || size > maxLength;
 };
 
-const yearsOfExperienceValidation = (
-  yearsOfExperience: number | null = null
-): number | null => {
-  if (yearsOfExperience !== null) {
-    if (isSizeOK(0, 120, yearsOfExperience))
-      throw createError(400, "maximum years of experience is 120");
-  }
-  return yearsOfExperience;
+const yearsOfExperienceValidation = (yearsOfExperience: number): number => {
+  if (isSizeOK(0, 120, yearsOfExperience))
+    throw createError(400, "maximum years of experience is 120");
+  return Number(yearsOfExperience);
 };
 
 const biggestCatchValidation = (biggestCatch: number): number => {
