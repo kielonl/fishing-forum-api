@@ -14,7 +14,7 @@ export default function login() {
 
       const res: Login | null = await loginQuery(userInfo);
       if (res === null) throw createError(403, "incorrect credentials");
-      response.code(200).send(res);
+      response.code(200).send([res]);
     }
   );
 }
