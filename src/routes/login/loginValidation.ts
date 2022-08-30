@@ -1,27 +1,30 @@
-const createError = require("http-errors");
-const crypto = require("crypto");
+import createError from "http-errors";
+import crypto from "crypto";
+import { UserInfo } from "../../types";
 
-const passwordHashing = (password) => {
+
+
+const passwordHashing = (password:string) => {
+  //@ts-ignore
   const hasher = crypto.createHmac("sha256", process.env.HASH_KEY);
   password = hasher.update(password).digest("hex");
   return password;
 };
 
-const isSizeOK = (minLength, maxLength, size) => {
+const isSizeOK = (minLength:number, maxLength:number, size:number) => {
   return size < minLength || size > maxLength;
 };
 
-const usernameValidation = (username) => {
+export const usernameValidation = (username:string) => {
   if (isSizeOK(3, 18, username.length))
     throw createError(
       400,
       "username length must be between 3 and 18 characters"
     );
-  if (!isNaN(username)) throw createError(400, "username cannot me a number");
   return username.trim();
 };
 
-const passwordValidation = (password) => {
+export const passwordValidation = (password:string) => {
   if (isSizeOK(3, 18, password.length))
     throw createError(
       400,
@@ -31,7 +34,8 @@ const passwordValidation = (password) => {
   return password;
 };
 
-const userInfoValidation = (userInfo) => {
+
+export const userInfoValidation = (userInfo:UserInfo) => {
   const user = {
     username: userInfo.username,
     password: passwordHashing(userInfo.password),
@@ -40,6 +44,3 @@ const userInfoValidation = (userInfo) => {
   return user;
 };
 
-module.exports.userInfoValidation = userInfoValidation;
-module.exports.usernameValidation = usernameValidation;
-module.exports.passwordValidation = passwordValidation;

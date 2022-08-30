@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model countries {
+  COUNTRY_ID   Int    @id @default(autoincrement())
+  COUNTRY_ISO  String @db.Char(2)
+  COUNTRY_ISO3 String @db.Char(3)
+  CALLING_CODE Int?
+  NAME         String @db.VarChar(80)
+}
+
+model details {
+  details_id          String    @id(map: "address_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  country             String    @db.VarChar(35)
+  city                String    @db.VarChar(35)
+  created_at          DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime? @db.Date
+  years_of_experience Int?
+  has_fishing_card    Boolean?
+  biggest_catch       Int?
+}
+
+model post {
+  post_id    String      @id(map: "posts_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title      String?
+  content    String
+  author     String
+  created_at DateTime?   @default(now()) @db.Timestamptz(6)
+  image      String?
+  reactions  reactions[]
+}
+
+model reactions {
+  reaction_id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String @db.Uuid
+  post_id     String @db.Uuid
+  value       Int    @default(0)
+  post        post   @relation(fields: [post_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_post_id")
+  user        user   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+}
+
+model user {
+  user_id    String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username   String      @db.VarChar(35)
+  password   String
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  updated_at DateTime?   @db.Timestamptz(6)
+  details_id String?     @db.Uuid
+  reactions  reactions[]
+}
