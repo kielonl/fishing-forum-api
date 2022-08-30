@@ -1,18 +1,12 @@
+import { Likes, Post } from "../../types";
 import { selectQuery, countReactionsQuery } from "./bestQueries";
 
-function compare(a: { likes: number }, b: { likes: number }) {
+function compare(a: Likes, b: Likes) {
   return a.likes - b.likes;
 }
 
 export const selectBest = async () => {
-  const result: {
-    post_id: string;
-    title: string | null;
-    content: string;
-    author: string;
-    image: string | null;
-    likes: number;
-  }[] = [];
+  let result: Post[] = [];
 
   const res = await selectQuery();
 
@@ -25,7 +19,7 @@ export const selectBest = async () => {
       content: res[index].content,
       author: res[index].author,
       image: res[index].image,
-      likes: likes[0]._sum.value === null ? 0 : likes[0]._sum.value,
+      likes: Number(likes[0]._sum.value),
     });
   }
   result.sort(compare);

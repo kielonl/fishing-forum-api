@@ -24,14 +24,11 @@ const yearsOfExperienceValidation = (
   return yearsOfExperience;
 };
 
-const biggestCatchValidation = (
-  biggestCatch: number | null = null
-): number | null => {
-  if (biggestCatch !== null) {
-    if (isSizeOK(0, 1002, biggestCatch))
-      throw createError(400, "fish weight must be between 0 kg and 1 ton");
+const biggestCatchValidation = (biggestCatch: number): number => {
+  if (isSizeOK(0, 1002, biggestCatch)) {
+    throw createError(400, "fish weight must be between 0 kg and 1 ton");
   }
-  return biggestCatch;
+  return Number(biggestCatch);
 };
 
 const fishingCardValidation = (hasFishingCard: boolean) => {

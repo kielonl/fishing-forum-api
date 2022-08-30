@@ -25,8 +25,8 @@ export type DetailsInfo = {
   country: string;
   city: string;
   hasFishingCard: boolean;
-  yearsOfExperience: number | null;
-  biggestCatch: number | null;
+  yearsOfExperience: numbe | null;
+  biggestCatch: number;
 };
 export type ReactionInfo = { user_id: string; post_id: string; value: string };
 
@@ -40,3 +40,16 @@ export type Login = {
 };
 
 export type UserCredentials = Omit<UserInfo, "date", "user_id">;
+
+export type Likes = {
+  likes: number;
+};
+
+export type Post = {
+  post_id: string;
+  title: string;
+  content: string;
+  author: string;
+  image: string | null;
+  likes: number;
+};

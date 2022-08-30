@@ -1,6 +1,6 @@
 import { fastify } from "../..";
 
-import { DetailsInfo, IdParam, UserCredentials, UserInfo } from "../../types";
+import { DetailsInfo, IdParam, UserCredentials } from "../../types";
 
 import {
   insertIntoUserQuery,
@@ -32,7 +32,7 @@ export function user() {
       response.code(201).send({ data: res });
     }
   );
-  fastify.post<{ Body: DetailsInfo }>( //may work but not sure 🤷‍♂️
+  fastify.post<{ Body: DetailsInfo }>(
     "/user/details",
     async (request, response) => {
       const details = await detailsValidation(request.body);
