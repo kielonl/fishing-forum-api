@@ -33,6 +33,7 @@ model post {
   author     String
   created_at DateTime?   @default(now()) @db.Timestamptz(6)
   image      String?
+  comment    comment[]
   reactions  reactions[]
 }
 
@@ -52,5 +53,16 @@ model user {
   created_at DateTime    @default(now()) @db.Timestamptz(6)
   updated_at DateTime?   @db.Timestamptz(6)
   details_id String?     @db.Uuid
+  comment    comment[]
   reactions  reactions[]
+}
+
+model comment {
+  comment_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  parent_id  String   @db.Uuid
+  content    String
+  user_id    String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  post       post     @relation(fields: [parent_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction)
+  user       user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }

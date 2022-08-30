@@ -4,6 +4,7 @@ import { best } from "./routes/best/best";
 import { post } from "./routes/post/post";
 import { reactions } from "./routes/reactions/reactions";
 import { user } from "./routes/user/user";
+import { comments } from "./routes/comments/comments";
 export const fastify = Fastify({
   logger: true,
 });
@@ -31,6 +32,7 @@ user();
 reactions();
 post();
 best();
+comments();
 fastify.listen({ port: port, host: "0.0.0.0" }, (err, address) => {
   if (err) throw err;
   console.log(`server is now listening on port ${port}`);

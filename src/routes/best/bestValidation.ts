@@ -2,7 +2,7 @@ import { Best, Post } from "../../types";
 import { selectQuery, countReactionsQuery } from "./bestQueries";
 
 function compare(a: Best, b: Best) {
-  return a.likes - b.likes;
+  // return a.likes - b.likes;
 }
 
 export const selectBest = async () => {
@@ -23,7 +23,7 @@ export const selectBest = async () => {
       likes: Number(likes[0]._sum.value),
     });
   }
-  result.sort(compare);
+  // result.sort(compare);
   result.reverse();
   return result;
 };

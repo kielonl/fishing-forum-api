@@ -1,3 +1,5 @@
+import { comment } from "@prisma/client";
+
 export type UserInfo = {
   user_id: string;
   post_id: string;
@@ -25,7 +27,7 @@ export type DetailsInfo = {
   country: string;
   city: string;
   hasFishingCard: boolean;
-  yearsOfExperience: numbe | null;
+  yearsOfExperience: number;
   biggestCatch: number;
 };
 export type ReactionInfo = { user_id: string; post_id: string; value: string };
@@ -43,14 +45,21 @@ export type UserCredentials = Omit<UserInfo, "date", "user_id">;
 
 export type Post = {
   post_id: string;
-  title: string;
+  title: string | null;
   content: string;
   author: string;
-  created_at: Date;
+  created_at: Date | null;
   image: string | null;
   likes: number;
   reacted: boolean;
   reactedValue: number | null;
+  comments: object[];
 };
 
-export type Best = Omit<Post, "reacted" | "reactedValue">;
+export type Best = Omit<Post, "reacted" | "reactedValue" | "comments">;
+
+export type Comment = {
+  parent_id: string;
+  user_id: string;
+  content: string;
+};

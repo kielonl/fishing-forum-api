@@ -1,4 +1,4 @@
-import { PostInfo } from "../../types";
+import { Best, PostInfo, Comment, Post } from "../../types";
 import prisma from "../../prisma";
 
 export const insertPostQuery = async (postInfo: PostInfo) => {
@@ -21,15 +21,17 @@ export const userExistsByUUID = async (userUUID: string) => {
       user_id: userUUID,
     },
   });
+  return query;
 };
 
 export const selectQuery = async () => {
   // return `SELECT * FROM public.post ORDER BY created_at DESC LIMIT 10`;
   const query = await prisma.post.findMany({
-    take: 10,
+    // take: 10,
     orderBy: {
       created_at: "desc",
     },
+    include: { comment: true, reactions: false },
   });
   return query;
 };
@@ -58,4 +60,17 @@ export const countReactionsQuery = async (post_id: string) => {
     },
   });
   return [query];
+};
+
+export const selectCommentsQuery = async (post_id: string) => {
+  const query = await prisma.comment.findMany({
+    orderBy: {
+      created_at: "asc",
+    },
+    where: {
+      parent_id: post_id,
+    },
+  });
+  console.log(typeof query);
+  return query;
 };

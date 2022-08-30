@@ -6,6 +6,7 @@ import {
   selectQuery,
   didReactQuery,
   countReactionsQuery,
+  selectCommentsQuery,
 } from "./postQueries";
 
 const isSizeOK = (minLength: number, maxLength: number, size: number) => {
@@ -74,11 +75,14 @@ const didClick = async (user_id: string, post_id: string) => {
 
 export const selectPosts = async (user_id: string) => {
   const result: Post[] = [];
+
   const res = await selectQuery();
+  console.log(res[0]);
   for (let index = 0; index < 10; index++) {
-    const response = await didClick(res[index].post_id, user_id);
+    const clicked = await didClick(res[index].post_id, user_id);
     const likes = await countReactionsQuery(res[index].post_id);
 
+    //pushing every post to result array of objects
     result.push({
       post_id: res[index].post_id,
       title: res[index].title,
@@ -87,8 +91,9 @@ export const selectPosts = async (user_id: string) => {
       created_at: res[index].created_at,
       image: res[index].image,
       likes: Number(likes[0]._sum.value),
-      reacted: response !== null,
-      reactedValue: response,
+      reacted: clicked !== null,
+      reactedValue: clicked,
+      comments: res[index].comment || [],
     });
   }
   return result;
