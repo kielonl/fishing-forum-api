@@ -15,7 +15,7 @@ const checkUser = async (user_id: string): Promise<boolean> => {
   return true;
 };
 
-const checkContent = async (content: string): Promise<boolean> => {
+const checkContent = (content: string): boolean => {
   if (content.length < 3 || content.length > 200)
     throw createError(
       400,
@@ -26,6 +26,6 @@ const checkContent = async (content: string): Promise<boolean> => {
 export const commentValidation = async (commentInfo: Comment) => {
   await parentValidation(commentInfo.parent_id);
   await checkUser(commentInfo.user_id);
-  await checkContent(commentInfo.content);
-  return commentInfo;
+  checkContent(commentInfo.content);
+  return true;
 };
