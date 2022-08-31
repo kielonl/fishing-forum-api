@@ -9,7 +9,6 @@ export const parentValidationQuery = async (parent_id: string) => {
       post_id: parent_id,
     },
   });
-  console.log(query);
   return query;
 };
 
@@ -24,6 +23,5 @@ export const addCommentQuery = async (commentInfo: Comment) => {
   if (query === null) {
     throw createError(401, "invalid");
   }
-  console.log(query);
   return query;
 };

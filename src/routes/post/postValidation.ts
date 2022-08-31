@@ -77,7 +77,6 @@ export const selectPosts = async (user_id: string) => {
   const result: Post[] = [];
 
   const res = await selectQuery();
-  console.log(res[0]);
   for (let index = 0; index < 10; index++) {
     const clicked = await didClick(res[index].post_id, user_id);
     const likes = await countReactionsQuery(res[index].post_id);

@@ -31,7 +31,7 @@ export const selectQuery = async () => {
     orderBy: {
       created_at: "desc",
     },
-    include: { comment: true, reactions: false },
+    include: { comment: true },
   });
   return query;
 };
@@ -71,6 +71,5 @@ export const selectCommentsQuery = async (post_id: string) => {
       parent_id: post_id,
     },
   });
-  console.log(typeof query);
   return query;
 };

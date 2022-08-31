@@ -48,7 +48,7 @@ export type Post = {
   title: string | null;
   content: string;
   author: string;
-  created_at: Date | null;
+  created_at: Date;
   image: string | null;
   likes: number;
   reacted: boolean;
